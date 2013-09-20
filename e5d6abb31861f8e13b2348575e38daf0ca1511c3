@@ -1,0 +1,8 @@
+Sanity-Review-1: Qt Sanity Bot <qt_sanitybot@qt-project.org>
+Sanity-Review+1: Christian Stromme <christian.stromme@digia.com>
+Code-Review+2: Eskil Abrahamsen Blomfeldt <eskil.abrahamsen-blomfeldt@digia.com>
+Submitted-by: Christian Stromme <christian.stromme@digia.com>
+Submitted-at: Fri, 20 Sep 2013 03:03:07 +0200
+Reviewed-on: https://codereview.qt-project.org/65933
+Project: qt/qtandroidextras
+Branch: refs/heads/master
