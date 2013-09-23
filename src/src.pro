@@ -1,2 +1,2 @@
 TEMPLATE = subdirs
-SUBDIRS += androidextras
+android:SUBDIRS += androidextras
