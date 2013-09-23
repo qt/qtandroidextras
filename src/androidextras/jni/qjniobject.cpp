@@ -1586,13 +1586,13 @@ jlong QJNIObject::getStaticField<jlong>(jclass clazz, const char *fieldName)
 template <>
 jlong QJNIObject::getStaticField<jlong>(const char *className, const char *fieldName)
 {
-    return getStaticField<jlong>(className, fieldName);
+    return QJNIObjectPrivate::getStaticField<jlong>(className, fieldName);
 }
 
 template <>
 jfloat QJNIObject::getStaticField<jfloat>(jclass clazz, const char *fieldName)
 {
-    return getStaticField<jfloat>(clazz, fieldName);
+    return QJNIObjectPrivate::getStaticField<jfloat>(clazz, fieldName);
 }
 
 template <>
