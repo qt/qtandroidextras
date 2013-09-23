@@ -1,0 +1,7 @@
+Sanity-Review+1: Qt Sanity Bot <qt_sanitybot@qt-project.org>
+Code-Review+2: Christian Stromme <christian.stromme@digia.com>
+Submitted-by: Christian Stromme <christian.stromme@digia.com>
+Submitted-at: Mon, 23 Sep 2013 21:00:16 +0200
+Reviewed-on: https://codereview.qt-project.org/66258
+Project: qt/qtandroidextras
+Branch: refs/heads/stable
