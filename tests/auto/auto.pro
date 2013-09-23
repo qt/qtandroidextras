@@ -1,3 +1,4 @@
 TEMPLATE = subdirs
 SUBDIRS += \
-        qjnienvironment
+        qjnienvironment \
+        qjniobject
