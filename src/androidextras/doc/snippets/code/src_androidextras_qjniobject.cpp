@@ -68,3 +68,16 @@ void function()
    // Ops! myJString is no longer valid.
 }
 //! [QJNIObject scope]
+
+//! [Check for exceptions]
+void function()
+{
+    QJNIObject myString = QJNIObject::fromString("Hello");
+    jchar c = myString.callMethod<jchar>("charAt", "(I)C", 1000);
+    QJNIEnvironment env;
+    if (env->ExceptionCheck()) {
+        // Handle exception here.
+        env->ExceptionClear();
+    }
+}
+//! [Check for exceptions]
