@@ -37,3 +37,16 @@
  ** $QT_END_LICENSE$
  **
  ****************************************************************************/
+
+//! [Create QJNIEnvironment]
+
+bool exceptionCheck()
+{
+    /*
+      The QJNIEnvironment attache the current thread to the JavaVM on
+      creation and detach when it goes out of scope.
+     */
+    QJNIEnvironment qjniEnv;
+    return qjniEnv->ExceptionCheck();
+}
+//! [Create QJNIEnvironment]

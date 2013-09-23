@@ -48,12 +48,14 @@ QT_BEGIN_NAMESPACE
 /*!
     \class QJNIObject
     \inmodule QtAndroidExtras
-    \brief The QJNIObject ...
+    \brief The QJNIObject is a C++ wrapper around a Java class.
     \since 5.2
 
-    \section1 Stub
+    QJNIObject provides APIs to call Java methods
 
-    Supported JNI object types:
+    \section1 JNI types
+
+    Object types:
     \list
     \li jobject
     \li jclass
@@ -70,7 +72,7 @@ QT_BEGIN_NAMESPACE
     \li jdoubleArray
     \endlist
 
-    Supported JNI Primitive types:
+    Primitive types:
     \list
     \li jboolean
     \li jbyte
@@ -82,21 +84,21 @@ QT_BEGIN_NAMESPACE
     \li jdouble
     \endlist
 
-    About function types: ...
+    \section1 General Notes:
 
-    - Class name strings needs to be the fully-qualified class name, e.g., "java/lang/String".
+    - Class name strings needs to be the fully-qualified class name, for example: "java/lang/String".
     - Method signatures are written as "(Arguments)ReturnType"
     - All object types are returned as a QJNIObject.
 
-    More information about JNI can be found in the java doc [url]
-
+    More information about JNI can be found in the java doc \l http://docs.oracle.com/javase/7/docs/technotes/guides/jni/spec/jniTOC.html
 */
 
 /*!
     \fn QJNIObject::QJNIObject()
 
-    \code
-    \endcode
+    Constructs an invalid QJNIObject.
+
+    \sa isValid()
 */
 
 /*!
@@ -143,10 +145,12 @@ QT_BEGIN_NAMESPACE
 /*!
     \fn QJNIObject::QJNIObject(jclass clazz, const char *signature, ...)
 
-    Constructs a new QJNIObject from \a clazz by calling the non-default
-    constructor with \a signature and arguments.
+    Constructs a new QJNIObject from \a clazz by calling the constructor with \a signature
+    and arguments.
 
     \code
+    jclazz myClass = ...;
+    QJNIObject::QJNIObject(myClazz, "(I)V", 3);
     \endcode
 */
 
@@ -167,20 +171,25 @@ QT_BEGIN_NAMESPACE
 */
 
 /*!
+    \fn T QJNIObject::callMethod(const char *methodName, const char *signature, ...) const
+
+    Calls the method \a methodName with \a signature and returns the value.
+
+    \code
+    QJNIObject myJavaString = ...;
+    jint index = myJavaString.callMethod<jint>("indexOf", "(I)I", 0x0051);
+    \endcode
+
+*/
+
+/*!
     \fn T QJNIObject::callMethod(const char *methodName) const
 
-    Calls the Java object method \a methodName and returns the value.
+    Calls the method \a methodName and returs the value.
 
     \code
     QJNIObject myJavaString = ...;
     jint size = myJavaString.callMethod<jint>("length");
-    \endcode
-*/
-
-/*!
-    \fn T QJNIObject::callMethod(const char *methodName, const char *signature, ...) const
-
-    \code
     \endcode
 */
 
@@ -210,20 +219,6 @@ QT_BEGIN_NAMESPACE
 */
 
 /*!
-    \fn T QJNIObject::callStaticMethod(const char *className, const char *methodName)
-
-    \code
-    \endcode
-*/
-
-/*!
-    \fn T QJNIObject::callStaticMethod(const char *className, const char *methodName, const char *sig, ...)
-
-    \code
-    \endcode
-*/
-
-/*!
     \fn T QJNIObject::callStaticMethod(jclass clazz, const char *methodName)
 
     Calls the static method \a methodName on \a clazz and returns the value T.
@@ -232,6 +227,30 @@ QT_BEGIN_NAMESPACE
     ...
     jclass javaMathClass = ...; // ("java/lang/Math")
     jdouble randNr = QJNIObject::callStaticMethod<jdouble>(javaMathClass, "random");
+    ...
+    \endcode
+*/
+
+/*!
+    \fn T QJNIObject::callStaticMethod(const char *className, const char *methodName)
+
+    Calls the static method \a methodName on class \a className and returns the value.
+
+    \code
+    jint value = QJNIObject::callStaticMethod<jint>("MyClass", "staticMethod");
+    \endcode
+*/
+
+/*!
+    \fn T QJNIObject::callStaticMethod(const char *className, const char *methodName, const char *signature, ...)
+
+    Calls the static method with \a methodName with \a signature on class \a className with optional arguments.
+
+    \code
+    ...
+    jint a = 2;
+    jint b = 4;
+    jint max = QJNIObject::callStaticMethod<jint>("java/lang/Math", "max", "(II)I", a, b);
     ...
     \endcode
 */
@@ -255,104 +274,100 @@ QT_BEGIN_NAMESPACE
 /*!
     \fn QJNIObject QJNIObject::callStaticObjectMethod(const char *className, const char *methodName)
 
+    Calls the static method with \a methodName on the class \a className.
+
     \code
+    QJNIObject string = QJNIObject::callStaticObjectMethod<jstring>("CustomClass", "getClassName");
     \endcode
 */
 
 /*!
-    \fn QJNIObject QJNIObject::callStaticObjectMethod(const char *className, const char *methodName, const char *sig, ...)
+    \fn QJNIObject QJNIObject::callStaticObjectMethod(const char *className, const char *methodName, const char *signature, ...)
+
+    Calls the static method with \a methodName and \a signature on the class \a className.
 
     \code
+    QJNIObject thread = QJNIObject::callStaticObjectMethod("java/lang/Thread", "currentThread", "()Ljava/lang/Thread;");
+    QJNIObject string = QJNIObject::callStaticObjectMethod("java/lang/String", "valueOf", "(I)Ljava/lang/String;", 10);
     \endcode
 */
 
 /*!
     \fn QJNIObject QJNIObject::callStaticObjectMethod(jclass clazz, const char *methodName)
 
-    Calls the static \e object method \a methodName on \a clazz.
-    \code
-    \endcode
+    Calls the static method with \a methodName on \a clazz.
+
 */
 
 /*!
     \fn QJNIObject QJNIObject::callStaticObjectMethod(jclass clazz, const char *methodName, const char *signature, ...)
 
-    \code
-    \endcode
+    Calls the static method with \a methodName and \a signature on class \a clazz.
 */
 
 /*!
     \fn T QJNIObject::getField(const char *fieldName) const
 
-    \code
-    \endcode
-*/
-
-/*!
-    \fn T QJNIObject::getField(const char *fieldName, const char *sig) const
+    Retrieves the value of the field \a fieldName.
 
     \code
+    QJNIObject volumeControll = ...;
+    jint fieldValue = obj.getField<jint>("MAX_VOLUME");
     \endcode
 */
 
 /*!
     \fn QJNIObject QJNIObject::getObjectField(const char *fieldName) const
 
-    \code
-    \endcode
+    Retrieves the object of field \a fieldName.
 */
 
 /*!
     \fn QJNIObject QJNIObject::getObjectField(const char *fieldName, const char *signature) const
 
-    \code
-    \endcode
+    Retrieves the object from the field with \a signature and \a fieldName.
 */
 
 /*!
     \fn T QJNIObject::getStaticField(const char *className, const char *fieldName)
 
-    \code
-    \endcode
+    Retrieves the value from the static field \a fieldName on the class \a className.
 */
 
 /*!
     \fn T QJNIObject::getStaticField(jclass clazz, const char *fieldName)
 
-    \code
-    \endcode
+    Retrieves the value from the static field \a fieldName on \a clazz.
 */
 
 /*!
     \fn QJNIObject QJNIObject::getStaticObjectField(const char *className, const char *fieldName)
 
-    \code
-    \endcode
+    Retrieves the object from the field \a fieldName on the class \a className.
 */
 
 /*!
     \fn QJNIObject QJNIObject::getStaticObjectField(const char *className, const char *fieldName, const char *signature)
 
-    \code
-    \endcode
+    Retrieves the object from the field with \a signature and \a fieldName on class \a className.
 */
 
 /*!
     \fn QJNIObject QJNIObject::getStaticObjectField(jclass clazz, const char *fieldName)
 
-    \code
-    \endcode
+    Retrieves the object from the field \a fieldName on \a clazz.
 */
 
 /*!
     \fn QJNIObject QJNIObject::getStaticObjectField(jclass clazz, const char *fieldName, const char *signature)
 
-    \code
-    \endcode
+    Retrieves the object from the field with \a signature and \a fieldName on \a clazz.
 */
 
 /*!
     \fn void QJNIObject::setField(const char *fieldName, T value)
+
+    Sets the value of \a fieldName to \a value.
 
     \code
     ...
@@ -367,36 +382,37 @@ QT_BEGIN_NAMESPACE
 /*!
     \fn void QJNIObject::setField(const char *fieldName, const char *signature, T value)
 
+    Sets the value of \a fieldName with \a signature to \a value.
+
     \code
+    QJNIObject stringArray = ...;
+    QJNIObject obj = ...;
+    obj.setField<jobjectArray>("KEY_VALUES", "([Ljava/lang/String;)V", stringArray.object<jobjectArray>())
     \endcode
 */
 
 /*!
     \fn void QJNIObject::setStaticField(const char *className, const char *fieldName, T value)
 
-    \code
-    \endcode
+    Sets the value of the static field \a fieldName in class \a className to \a value.
 */
 
 /*!
-    \fn void QJNIObject::setStaticField(const char *className, const char *fieldName, const char *sig, T value);
+    \fn void QJNIObject::setStaticField(const char *className, const char *fieldName, const char *signature, T value);
 
-    \code
-    \endcode
+    Sets the static field with \a fieldName and \a signature to \a value on class \a className.
 */
 
 /*!
     \fn void QJNIObject::setStaticField(jclass clazz, const char *fieldName, T value)
 
-    \code
-    \endcode
+    Sets the static field \a fieldName of the class \a clazz to \a value.
 */
 
 /*!
-    \fn void QJNIObject::setStaticField(jclass clazz, const char *fieldName, const char *sig, T value);
+    \fn void QJNIObject::setStaticField(jclass clazz, const char *fieldName, const char *signature, T value);
 
-    \code
-    \endcode
+    Sets the static field with \a fieldName and \a signature to \a value on class \a clazz.
 */
 
 /*!
@@ -448,26 +464,27 @@ QT_BEGIN_NAMESPACE
     \fn QJNIObject &QJNIObject::operator=(T object)
 
     Replace the current object with \a object. The old Java object will be released.
-
-    \code
-    \endcode
 */
 
 /*!
     \fn QString QJNIObject::toString() const
 
-    Returns a QString with the data returned from calling the toString() function on a java object.
-    If the QJNIObject is wrapped around a Java String, calling this is a convenient way to convert
-    a Java string to a QString.
+    Returns a QString with a string representation of the java object.
+    Calling this function on a Java String object is a convenient way of getting the actuall string
+    data.
 
     \code
+    QJNIObject string = ...; //  "Hello Java"
+    QString qstring = string.toString(); // "Hello Java"
     \endcode
+
+    \sa fromString()
 */
 
 /*!
     \fn QJNIObject QJNIObject::fromString(const QString &string)
 
-    Creates a Java string from the QString \a string and returns a QJNIObject wrapping that string.
+    Creates a Java string from the QString \a string and returns a QJNIObject holding that string.
 
     \code
     ...
@@ -475,6 +492,8 @@ QT_BEGIN_NAMESPACE
     QJNIObject myJavaString = QJNIObject::fromString(myQString);
     ...
     \endcode
+
+    \sa toString()
 */
 
 /*!
