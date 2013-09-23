@@ -1,2 +1,3 @@
-TEMPLATE=subdirs
-SUBDIRS=
+TEMPLATE = subdirs
+SUBDIRS += \
+	qjnienvironment
