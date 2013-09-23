@@ -28,10 +28,23 @@
 /*!
     \module QtAndroidExtras
     \title Qt Android Extras C++ Classes
-    \brief The Qt Android Extras module contains functionality to additional functionality to aid development on Android.
+    \brief The Qt Android Extras module contains additional functionality for development on Android.
 
     \ingroup modules
     \qtvariable androidextras
 
-    The Qt Android Extras module adds...
+    To include the definitions of the module's classes, use the
+    following directive:
+
+    \code
+    #include <QtAndroidExtras>
+    \endcode
+
+    To link against the module, add this line to your \l qmake \c
+    .pro file:
+
+    \code
+    QT += androidextras
+    \endcode
+
 */

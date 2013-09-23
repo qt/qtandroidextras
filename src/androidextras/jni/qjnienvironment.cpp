@@ -46,6 +46,40 @@
 
 QT_BEGIN_NAMESPACE
 
+/*!
+    \class QJNIEnvironment
+    \inmodule QtAndroidExtras
+    \brief The QJNIEnvironment provides access to the JNI Environment.
+    \since 5.2
+*/
+
+/*!
+    \fn QJNIEnvironment::QJNIEnvironment()
+
+    Constructs a new QJNIEnvironment object and attache the current thread to the Java VM.
+
+    \snippet code/src_androidextras_qjnenvironment.cpp Create QJNEnvironment
+*/
+
+/*!
+    \fn QJNIEnvironment::~QJNIEnvironment()
+
+    Detetches the current thread from the Java VM and destroys the QJNIEnvironment object.
+*/
+
+/*!
+    \fn JavaVM *QJNIEnvironment::javaVM()
+
+    Returns the Java VM interface.
+*/
+
+/*!
+    \fn JNIEnv *QJNIEnvironment::operator->()
+
+    Provides access to the QJNIEnvironments JNIEnv pointer.
+*/
+
+
 QJNIEnvironment::QJNIEnvironment()
     : d(new QJNIEnvironmentPrivate)
 {
