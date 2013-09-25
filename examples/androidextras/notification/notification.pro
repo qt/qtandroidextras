@@ -8,8 +8,7 @@ ANDROID_APP_NAME = Qt Notifier
 
 SOURCES += \
     main.cpp \
-    notificationclient.cpp \
-    androidjnibindings.cpp
+    notificationclient.cpp
 
 OTHER_FILES += \
     qml/main.qml \
@@ -20,5 +19,4 @@ RESOURCES += \
     main.qrc
 
 HEADERS += \
-    notificationclient.h \
-    androidjnibindings.h
+    notificationclient.h
