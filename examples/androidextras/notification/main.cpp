@@ -1,9 +1,10 @@
+
 /****************************************************************************
 **
 ** Copyright (C) 2013 Digia Plc and/or its subsidiary(-ies).
 ** Contact: http://www.qt-project.org/legal
 **
-** This file is part of the Qt Toolkit.
+** This file is part of the QtWinExtras module of the Qt Toolkit.
 **
 ** $QT_BEGIN_LICENSE:LGPL$
 ** Commercial License Usage
@@ -39,75 +40,23 @@
 **
 ****************************************************************************/
 
-#include "qjnienvironment.h"
-#include <QtCore/private/qjni_p.h>
-#include <QtCore/private/qjnihelpers_p.h>
-#include <QtCore/qthreadstorage.h>
+#include <QtGui>
+#include <QtQuick>
 
-QT_BEGIN_NAMESPACE
+#include "notificationclient.h"
 
-/*!
-    \class QJNIEnvironment
-    \inmodule QtAndroidExtras
-    \brief The QJNIEnvironment provides access to the JNI Environment.
-    \since 5.2
-*/
-
-/*!
-    \fn QJNIEnvironment::QJNIEnvironment()
-
-    Constructs a new QJNIEnvironment object and attach the current thread to the Java VM.
-
-    \snippet code/src_androidextras_qjnienvironment.cpp Create QJNIEnvironment
-*/
-
-/*!
-    \fn QJNIEnvironment::~QJNIEnvironment()
-
-    Detaches the current thread from the Java VM and destroys the QJNIEnvironment object.
-*/
-
-/*!
-    \fn JavaVM *QJNIEnvironment::javaVM()
-
-    Returns the Java VM interface.
-*/
-
-/*!
-    \fn JNIEnv *QJNIEnvironment::operator->()
-
-    Provides access to the QJNIEnvironment's JNIEnv pointer.
-*/
-
-/*!
-    \fn QJNIEnvironment::operator JNIEnv *() const
-
-    Returns the the JNI Environment pointer.
- */
-
-
-QJNIEnvironment::QJNIEnvironment()
-    : d(new QJNIEnvironmentPrivate)
+int main(int argc, char **argv)
 {
-}
+    QGuiApplication app(argc, argv);
 
-QJNIEnvironment::~QJNIEnvironment()
-{
-}
+    QQuickView view;
 
-JavaVM *QJNIEnvironment::javaVM()
-{
-    return QtAndroidPrivate::javaVM();
-}
+    NotificationClient *notificationClient = new NotificationClient(&view);
+    view.engine()->rootContext()->setContextProperty(QLatin1String("notificationClient"),
+                                                     notificationClient);
+    view.setResizeMode(QQuickView::SizeRootObjectToView);
+    view.setSource(QUrl(QStringLiteral("qrc:/qml/main.qml")));
+    view.show();
 
-JNIEnv *QJNIEnvironment::operator->()
-{
-    return d->jniEnv;
+    return app.exec();
 }
-
-QJNIEnvironment::operator JNIEnv*() const
-{
-    return d->jniEnv;
-}
-
-QT_END_NAMESPACE

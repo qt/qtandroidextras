@@ -3,7 +3,7 @@
 ** Copyright (C) 2013 Digia Plc and/or its subsidiary(-ies).
 ** Contact: http://www.qt-project.org/legal
 **
-** This file is part of the Qt Toolkit.
+** This file is part of the QtWinExtras module of the Qt Toolkit.
 **
 ** $QT_BEGIN_LICENSE:LGPL$
 ** Commercial License Usage
@@ -39,75 +39,30 @@
 **
 ****************************************************************************/
 
-#include "qjnienvironment.h"
-#include <QtCore/private/qjni_p.h>
-#include <QtCore/private/qjnihelpers_p.h>
-#include <QtCore/qthreadstorage.h>
+#include "androidjnibindings.h"
 
-QT_BEGIN_NAMESPACE
-
-/*!
-    \class QJNIEnvironment
-    \inmodule QtAndroidExtras
-    \brief The QJNIEnvironment provides access to the JNI Environment.
-    \since 5.2
-*/
-
-/*!
-    \fn QJNIEnvironment::QJNIEnvironment()
-
-    Constructs a new QJNIEnvironment object and attach the current thread to the Java VM.
-
-    \snippet code/src_androidextras_qjnienvironment.cpp Create QJNIEnvironment
-*/
-
-/*!
-    \fn QJNIEnvironment::~QJNIEnvironment()
-
-    Detaches the current thread from the Java VM and destroys the QJNIEnvironment object.
-*/
-
-/*!
-    \fn JavaVM *QJNIEnvironment::javaVM()
-
-    Returns the Java VM interface.
-*/
-
-/*!
-    \fn JNIEnv *QJNIEnvironment::operator->()
-
-    Provides access to the QJNIEnvironment's JNIEnv pointer.
-*/
-
-/*!
-    \fn QJNIEnvironment::operator JNIEnv *() const
-
-    Returns the the JNI Environment pointer.
- */
-
-
-QJNIEnvironment::QJNIEnvironment()
-    : d(new QJNIEnvironmentPrivate)
+jint JNICALL JNI_OnLoad(JavaVM *vm, void *)
 {
+    JNIEnv *env;
+    if (vm->GetEnv(reinterpret_cast<void **>(&env), JNI_VERSION_1_4) != JNI_OK) {
+        qFatal("Couldn't initialize environment!");
+        return -1;
+    }
+
+    AndroidJNIBindings::detectNotificationClientClass(env);
+
+    return JNI_VERSION_1_4;
 }
 
-QJNIEnvironment::~QJNIEnvironment()
+jclass AndroidJNIBindings::m_notificationClientClass = 0;
+void AndroidJNIBindings::detectNotificationClientClass(JNIEnv *environment)
 {
-}
+    jclass clazz = environment->FindClass("org/qtproject/example/notification/NotificationClient");
+    if (clazz == 0) {
+        environment->ExceptionDescribe();
+        environment->ExceptionClear();
+        return;
+    }
 
-JavaVM *QJNIEnvironment::javaVM()
-{
-    return QtAndroidPrivate::javaVM();
+    m_notificationClientClass = reinterpret_cast<jclass>(environment->NewGlobalRef(clazz));
 }
-
-JNIEnv *QJNIEnvironment::operator->()
-{
-    return d->jniEnv;
-}
-
-QJNIEnvironment::operator JNIEnv*() const
-{
-    return d->jniEnv;
-}
-
-QT_END_NAMESPACE

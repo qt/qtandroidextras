@@ -3,7 +3,7 @@
 ** Copyright (C) 2013 Digia Plc and/or its subsidiary(-ies).
 ** Contact: http://www.qt-project.org/legal
 **
-** This file is part of the Qt Toolkit.
+** This file is part of the QtWinExtras module of the Qt Toolkit.
 **
 ** $QT_BEGIN_LICENSE:LGPL$
 ** Commercial License Usage
@@ -39,75 +39,29 @@
 **
 ****************************************************************************/
 
-#include "qjnienvironment.h"
-#include <QtCore/private/qjni_p.h>
-#include <QtCore/private/qjnihelpers_p.h>
-#include <QtCore/qthreadstorage.h>
+#ifndef NOTIFICATIONCLIENT_H
+#define NOTIFICATIONCLIENT_H
 
-QT_BEGIN_NAMESPACE
+#include <QObject>
 
-/*!
-    \class QJNIEnvironment
-    \inmodule QtAndroidExtras
-    \brief The QJNIEnvironment provides access to the JNI Environment.
-    \since 5.2
-*/
-
-/*!
-    \fn QJNIEnvironment::QJNIEnvironment()
-
-    Constructs a new QJNIEnvironment object and attach the current thread to the Java VM.
-
-    \snippet code/src_androidextras_qjnienvironment.cpp Create QJNIEnvironment
-*/
-
-/*!
-    \fn QJNIEnvironment::~QJNIEnvironment()
-
-    Detaches the current thread from the Java VM and destroys the QJNIEnvironment object.
-*/
-
-/*!
-    \fn JavaVM *QJNIEnvironment::javaVM()
-
-    Returns the Java VM interface.
-*/
-
-/*!
-    \fn JNIEnv *QJNIEnvironment::operator->()
-
-    Provides access to the QJNIEnvironment's JNIEnv pointer.
-*/
-
-/*!
-    \fn QJNIEnvironment::operator JNIEnv *() const
-
-    Returns the the JNI Environment pointer.
- */
-
-
-QJNIEnvironment::QJNIEnvironment()
-    : d(new QJNIEnvironmentPrivate)
+class NotificationClient : public QObject
 {
-}
+    Q_OBJECT
+    Q_PROPERTY(QString notification READ notification WRITE setNotification NOTIFY notificationChanged)
+public:
+    explicit NotificationClient(QObject *parent = 0);
 
-QJNIEnvironment::~QJNIEnvironment()
-{
-}
+    void setNotification(const QString &notification);
+    QString notification() const;
 
-JavaVM *QJNIEnvironment::javaVM()
-{
-    return QtAndroidPrivate::javaVM();
-}
+signals:
+    void notificationChanged();
 
-JNIEnv *QJNIEnvironment::operator->()
-{
-    return d->jniEnv;
-}
+private slots:
+    void updateAndroidNotification();
 
-QJNIEnvironment::operator JNIEnv*() const
-{
-    return d->jniEnv;
-}
+private:
+    QString m_notification;
+};
 
-QT_END_NAMESPACE
+#endif // NOTIFICATIONCLIENT_H

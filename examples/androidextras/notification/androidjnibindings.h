@@ -3,7 +3,7 @@
 ** Copyright (C) 2013 Digia Plc and/or its subsidiary(-ies).
 ** Contact: http://www.qt-project.org/legal
 **
-** This file is part of the Qt Toolkit.
+** This file is part of the QtWinExtras module of the Qt Toolkit.
 **
 ** $QT_BEGIN_LICENSE:LGPL$
 ** Commercial License Usage
@@ -39,75 +39,23 @@
 **
 ****************************************************************************/
 
-#include "qjnienvironment.h"
-#include <QtCore/private/qjni_p.h>
-#include <QtCore/private/qjnihelpers_p.h>
-#include <QtCore/qthreadstorage.h>
+#ifndef ANDROIDJNIBINDINGS_H
+#define ANDROIDJNIBINDINGS_H
 
-QT_BEGIN_NAMESPACE
+#include <QtAndroidExtras/QJNIObject>
 
-/*!
-    \class QJNIEnvironment
-    \inmodule QtAndroidExtras
-    \brief The QJNIEnvironment provides access to the JNI Environment.
-    \since 5.2
-*/
-
-/*!
-    \fn QJNIEnvironment::QJNIEnvironment()
-
-    Constructs a new QJNIEnvironment object and attach the current thread to the Java VM.
-
-    \snippet code/src_androidextras_qjnienvironment.cpp Create QJNIEnvironment
-*/
-
-/*!
-    \fn QJNIEnvironment::~QJNIEnvironment()
-
-    Detaches the current thread from the Java VM and destroys the QJNIEnvironment object.
-*/
-
-/*!
-    \fn JavaVM *QJNIEnvironment::javaVM()
-
-    Returns the Java VM interface.
-*/
-
-/*!
-    \fn JNIEnv *QJNIEnvironment::operator->()
-
-    Provides access to the QJNIEnvironment's JNIEnv pointer.
-*/
-
-/*!
-    \fn QJNIEnvironment::operator JNIEnv *() const
-
-    Returns the the JNI Environment pointer.
- */
-
-
-QJNIEnvironment::QJNIEnvironment()
-    : d(new QJNIEnvironmentPrivate)
+class AndroidJNIBindings
 {
-}
+public:
+    static jclass notificationClientClass()
+    {
+        return m_notificationClientClass;
+    }
 
-QJNIEnvironment::~QJNIEnvironment()
-{
-}
+    static void detectNotificationClientClass(JNIEnv *environment);
 
-JavaVM *QJNIEnvironment::javaVM()
-{
-    return QtAndroidPrivate::javaVM();
-}
+private:
+    static jclass m_notificationClientClass;
+};
 
-JNIEnv *QJNIEnvironment::operator->()
-{
-    return d->jniEnv;
-}
-
-QJNIEnvironment::operator JNIEnv*() const
-{
-    return d->jniEnv;
-}
-
-QT_END_NAMESPACE
+#endif // ANDROIDJNIBINDINGS_H

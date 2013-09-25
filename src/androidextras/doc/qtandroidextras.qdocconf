@@ -29,7 +29,7 @@ tagfile = ../../../doc/qtandroidextras/qtandroidextras.tags
 depends += qtcore
 headerdirs += ..
 sourcedirs += ..
-exampledirs += ../../../examples/qtandroidextras \
+exampledirs += ../../../examples/androidextras \
                ../ \
                snippets
 

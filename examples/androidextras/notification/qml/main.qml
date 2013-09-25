@@ -3,7 +3,7 @@
 ** Copyright (C) 2013 Digia Plc and/or its subsidiary(-ies).
 ** Contact: http://www.qt-project.org/legal
 **
-** This file is part of the Qt Toolkit.
+** This file is part of the QtWinExtras module of the Qt Toolkit.
 **
 ** $QT_BEGIN_LICENSE:LGPL$
 ** Commercial License Usage
@@ -39,75 +39,68 @@
 **
 ****************************************************************************/
 
-#include "qjnienvironment.h"
-#include <QtCore/private/qjni_p.h>
-#include <QtCore/private/qjnihelpers_p.h>
-#include <QtCore/qthreadstorage.h>
+import QtQuick 2.0
 
-QT_BEGIN_NAMESPACE
+Rectangle {
+    width: 500
+    height: 500
+    color: "white"
 
-/*!
-    \class QJNIEnvironment
-    \inmodule QtAndroidExtras
-    \brief The QJNIEnvironment provides access to the JNI Environment.
-    \since 5.2
-*/
+    Column {
+        anchors.fill: parent
+        spacing: (height - happyButton.height - sadButton.height - title.height) / 3
 
-/*!
-    \fn QJNIEnvironment::QJNIEnvironment()
+        Text {
+            id: title
+            color: "black"
+            font.pixelSize: parent.width / 20
+            text: "How are you feeling?"
+            width: parent.width
+            horizontalAlignment: Text.AlignHCenter
+        }
 
-    Constructs a new QJNIEnvironment object and attach the current thread to the Java VM.
+        Image {
+            id: happyButton
+            height: parent.height / 5
+            fillMode: Image.PreserveAspectFit
+            source: "../images/happy.png"
+            anchors.horizontalCenter: parent.horizontalCenter
+            smooth: true
 
-    \snippet code/src_androidextras_qjnienvironment.cpp Create QJNIEnvironment
-*/
+            Behavior on scale {
+                PropertyAnimation {
+                    duration: 100
+                }
+            }
 
-/*!
-    \fn QJNIEnvironment::~QJNIEnvironment()
+            MouseArea {
+                anchors.fill: parent
+                onClicked: notificationClient.notification = "User is happy!"
+                onPressed: happyButton.scale = 0.9
+                onReleased: happyButton.scale = 1.0
+            }
+        }
 
-    Detaches the current thread from the Java VM and destroys the QJNIEnvironment object.
-*/
+        Image {
+            id: sadButton
+            height: parent.height / 5
+            fillMode: Image.PreserveAspectFit
+            source: "../images/sad.png"
+            anchors.horizontalCenter: parent.horizontalCenter
+            smooth: true
 
-/*!
-    \fn JavaVM *QJNIEnvironment::javaVM()
+            Behavior on scale {
+                PropertyAnimation {
+                    duration: 100
+                }
+            }
 
-    Returns the Java VM interface.
-*/
-
-/*!
-    \fn JNIEnv *QJNIEnvironment::operator->()
-
-    Provides access to the QJNIEnvironment's JNIEnv pointer.
-*/
-
-/*!
-    \fn QJNIEnvironment::operator JNIEnv *() const
-
-    Returns the the JNI Environment pointer.
- */
-
-
-QJNIEnvironment::QJNIEnvironment()
-    : d(new QJNIEnvironmentPrivate)
-{
+            MouseArea {
+                anchors.fill: parent
+                onClicked: notificationClient.notification = "User is sad :("
+                onPressed: sadButton.scale = 0.9
+                onReleased: sadButton.scale = 1.0
+            }
+        }
+    }
 }
-
-QJNIEnvironment::~QJNIEnvironment()
-{
-}
-
-JavaVM *QJNIEnvironment::javaVM()
-{
-    return QtAndroidPrivate::javaVM();
-}
-
-JNIEnv *QJNIEnvironment::operator->()
-{
-    return d->jniEnv;
-}
-
-QJNIEnvironment::operator JNIEnv*() const
-{
-    return d->jniEnv;
-}
-
-QT_END_NAMESPACE

@@ -3,7 +3,7 @@
 ** Copyright (C) 2013 Digia Plc and/or its subsidiary(-ies).
 ** Contact: http://www.qt-project.org/legal
 **
-** This file is part of the Qt Toolkit.
+** This file is part of the QtWinExtras module of the Qt Toolkit.
 **
 ** $QT_BEGIN_LICENSE:LGPL$
 ** Commercial License Usage
@@ -39,75 +39,33 @@
 **
 ****************************************************************************/
 
-#include "qjnienvironment.h"
-#include <QtCore/private/qjni_p.h>
-#include <QtCore/private/qjnihelpers_p.h>
-#include <QtCore/qthreadstorage.h>
+package org.qtproject.example.notification;
 
-QT_BEGIN_NAMESPACE
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.content.Context;
 
-/*!
-    \class QJNIEnvironment
-    \inmodule QtAndroidExtras
-    \brief The QJNIEnvironment provides access to the JNI Environment.
-    \since 5.2
-*/
-
-/*!
-    \fn QJNIEnvironment::QJNIEnvironment()
-
-    Constructs a new QJNIEnvironment object and attach the current thread to the Java VM.
-
-    \snippet code/src_androidextras_qjnienvironment.cpp Create QJNIEnvironment
-*/
-
-/*!
-    \fn QJNIEnvironment::~QJNIEnvironment()
-
-    Detaches the current thread from the Java VM and destroys the QJNIEnvironment object.
-*/
-
-/*!
-    \fn JavaVM *QJNIEnvironment::javaVM()
-
-    Returns the Java VM interface.
-*/
-
-/*!
-    \fn JNIEnv *QJNIEnvironment::operator->()
-
-    Provides access to the QJNIEnvironment's JNIEnv pointer.
-*/
-
-/*!
-    \fn QJNIEnvironment::operator JNIEnv *() const
-
-    Returns the the JNI Environment pointer.
- */
-
-
-QJNIEnvironment::QJNIEnvironment()
-    : d(new QJNIEnvironmentPrivate)
+public class NotificationClient extends org.qtproject.qt5.android.bindings.QtActivity
 {
-}
+    private static NotificationManager m_notificationManager;
+    private static Notification.Builder m_builder;
+    private static NotificationClient m_instance;
 
-QJNIEnvironment::~QJNIEnvironment()
-{
-}
+    public NotificationClient()
+    {
+        m_instance = this;
+    }
 
-JavaVM *QJNIEnvironment::javaVM()
-{
-    return QtAndroidPrivate::javaVM();
-}
+    public static void notify(String s)
+    {
+        if (m_notificationManager == null) {
+            m_notificationManager = (NotificationManager)m_instance.getSystemService(Context.NOTIFICATION_SERVICE);
+            m_builder = new Notification.Builder(m_instance);
+            m_builder.setSmallIcon(R.drawable.icon);
+            m_builder.setContentTitle("A message from Qt!");
+        }
 
-JNIEnv *QJNIEnvironment::operator->()
-{
-    return d->jniEnv;
+        m_builder.setContentText(s);
+        m_notificationManager.notify(1, m_builder.build());
+    }
 }
-
-QJNIEnvironment::operator JNIEnv*() const
-{
-    return d->jniEnv;
-}
-
-QT_END_NAMESPACE
