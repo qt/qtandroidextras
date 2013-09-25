@@ -40,7 +40,6 @@
 ****************************************************************************/
 
 #include "notificationclient.h"
-#include "androidjnibindings.h"
 
 #include <QtAndroidExtras/QJNIObject>
 
@@ -67,7 +66,7 @@ QString NotificationClient::notification() const
 void NotificationClient::updateAndroidNotification()
 {
     QJNIObject javaNotification = QJNIObject::fromString(m_notification);
-    QJNIObject::callStaticMethod<void>(AndroidJNIBindings::notificationClientClass(),
+    QJNIObject::callStaticMethod<void>("org/qtproject/example/notification/NotificationClient",
                                        "notify",
                                        "(Ljava/lang/String;)V",
                                        javaNotification.object<jstring>());
