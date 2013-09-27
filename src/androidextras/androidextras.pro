@@ -1,6 +1,7 @@
 TARGET = QtAndroidExtras
 DEFINES += QT_NO_USING_NAMESPACE
-QMAKE_DOCS = $$PWD/doc/qtandroidextras.qdocconf
+QMAKE_DOCS = \
+             $$PWD/doc/qtandroidextras.qdocconf
 QT -= gui
 QT += core-private
 load(qt_module)
