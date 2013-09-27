@@ -24,38 +24,13 @@
 ** $QT_END_LICENSE$
 **
 ****************************************************************************/
-
 /*!
-    \page qtandroidextras-index.html
-    \title Qt Android Extras
+    \group examples-qtandroidextras
+    \title Qt Android Extras Examples
+    \brief Examples in the Qt Android Extras module.
+    \ingroup all-examples
 
-    \brief The Qt Android Extras module contains adittional functionality to aid development on Android.
+    These are the examples available in the \l{Qt Android Extras} module.
 
-    \section1 Getting Started
-
-    To include the definitions of the module's classes, use the
-    following directive:
-
-    \code
-    #include <QtAndroidExtras>
-    \endcode
-
-    To link against the Qt Android Extras module, add this line to your project file:
-
-    \code
-    QT += androidextras
-    \endcode
-
-    \section1 API Reference
-
-    Links to the API reference materials:
-    \list
-    \li \l{Qt Android Extras C++ Classes}{C++ Classes}
-    \endlist
-
-    \section1 Examples
-
-    \list
-    \li \l{Qt Android Extras Examples}
-    \endlist
+    \note These examples will only work on Android.
 */
