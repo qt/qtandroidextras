@@ -81,3 +81,51 @@ void function()
     }
 }
 //! [Check for exceptions]
+
+//! [Java native methods]
+class FooJavaClass
+{
+    public static void foo(int x)
+    {
+        if (x < 100)
+            callNativeOne(x);
+        else
+            callNativeTwo(x);
+    }
+
+private static native void callNativeOne(int x);
+private static native void callNativeTwo(int x);
+
+}
+//! [Java native methods]
+
+    //! [Registering native methods]
+static void fromJavaOne(jint x)
+{
+   qDebug() << x << "< 100";
+}
+
+static void fromJavaTwo(jint x)
+{
+    qDebug() << x << ">= 100";
+}
+
+void registerNativeMethods() {
+    JNINativeMethod methods[] {{"callNativeOne", "(I)V", reinterpret_cast<void *>(fromJavaOne)},
+                               {"callNativeTwo", "(I)V", reinterpret_cast<void *>(fromJavaTwo)}};
+
+    QJNIObject javaClass("my/java/project/FooJavaClass");
+    QJNIEnvironment env;
+    env->RegisterNatives(env->GetObjectClass(javaClass),
+                         methods,
+                         sizeof(methods) / sizeof(methods[0]));
+
+}
+
+void foo()
+{
+    QJNIObject::callStaticMethod("my/java/project/FooJavaClass", "foo", "(I)V", 10);  // Output: 10 < 100
+    QJNIObject::callStaticMethod("my/java/project/FooJavaClass", "foo", "(I)V", 100); // Output: 100 >= 100
+}
+
+//! [Registering native methods]
