@@ -48,54 +48,193 @@ QT_BEGIN_NAMESPACE
 /*!
     \class QJNIObject
     \inmodule QtAndroidExtras
-    \brief The QJNIObject is a C++ wrapper around a Java class.
+    \brief The QJNIObject is a C++ wrapper around a Java objects.
     \since 5.2
 
-    QJNIObject provides APIs to call Java methods
+    QJNIObject provides APIs to call Java code from C++ by acting as a wrapper around a Java object.
+
+    \section1 General Notes
+
+    \list
+    \li Class names needs to contain the fully-qualified class name, for example: \b"java/lang/String".
+    \li Method signatures are written as \b"(Arguments)ReturnType"
+    \li All object types are returned as a QJNIObject.
+    \endlist
+
+    \section1 Method signatures
+
+    For functions that take no arguments QJNIObject provides convenience functions that will use
+    the correct signature based on the provided template type, for example:
+
+    \code
+    jint x = QJNIObject::callMethod<jint>("getSize");
+    QJNIObject::callMethod<void>("touch");
+    \endcode
+
+    In other cases you will need to supply the signature yourself, and it is important that the
+    signature matches the function you want to call. The signature structure is \b \(A\)R, where \b A
+    is the type of the argument\(s\) and \b R is the return type.
+    Any types in the signature that are arrays needs to have the character \b\[ in front of them, in addition
+    fully-qualified type names needs to be surrounded with \b L and \b ; at the start and end, respectively.
+
+    The example below demonstrates how to call two different static functions.
+    \code
+    // Java class
+    package org.qtproject.qt5;
+    class TestClass
+    {
+       static String fromNumber(int x) { ... }
+       static String[] stringArray(String s1, String s2) { ... }
+    }
+    \endcode
+
+    The signature for the first function is \b"\(I\)Ljava/lang/String;"
+
+    \code
+    // C++ code
+    QJNIObject stringNumber = QJNIObject::callStaticObjectMethod("org/qtproject/qt5/TestClass",
+                                                                 "fromNumber"
+                                                                 "(I)Ljava/lang/String;",
+                                                                 10);
+    \endcode
+
+    and the signature for the second function is \b"\(Ljava/lang/String;Ljava/lang/String;\)\[Ljava/lang/String;"
+
+    \code
+    // C++ code
+    QJNIObject string1 = QJNIObject::fromString("String1");
+    QJNIObject string2 = QJNIObject::fromString("String2");
+    QJNIObject stringArray = QJNIObject::callStaticObjectMethod("org/qtproject/qt5/TestClass",
+                                                                "stringArray"
+                                                                "(Ljava/lang/String;Ljava/lang/String;)[Ljava/lang/String;"
+                                                                string1.object<jstring>(),
+                                                                string2.object<jstring>());
+    \endcode
+
+
+    \section1 Handling Java exception
+
+    When calling Java functions that might throw an exception, it is important that you check, handle
+    and clear out the exception before continuing, it is unsafe to make a JNI call when there are
+    exceptions pending.
+
+    \snippet code/src_androidextras_qjniobject.cpp Check for exceptions
+
+    \section1 Java native methods
+
+    Java native methods makes it possible to call native code from Java, this is done by creating a
+    function declaration in Java and prefixing it with the \b native keyword.
+    Before a native function can be called from Java, you need to map the Java native function to a
+    native function in your code. Mapping functions can be done by calling the RegisterNatives() function
+    through the \l{QJNIEnvironment}{JNI environment pointer}.
+
+    The example below demonstrates how the this could be done.
+
+    Java implementation:
+    \snippet code/src_androidextras_qjniobject.cpp Java native methods
+
+    C++ Implementation:
+    \snippet code/src_androidextras_qjniobject.cpp Registering native methods
+
+    \section1 The lifetime of a Java object
+
+    All \l{Object types}{Java objects} returned from a JNI call is by default a local references and
+    will only stay valid in the scope it was returned in, afther that the object becomes eligible for
+    garbage collection. If you want to keep a Java object alive you need to either create a new global
+    reference to the object and release it when you are done, or construct a new QJNIObject and let
+    it manage the lifetime of the Java object.
+    \sa object()
+
+    \note The QJNIObject does only manage it's own references, if you construct a QJNIObject from a
+          global reference that reference will not be released by the QJNIObject.
 
     \section1 JNI types
 
-    Object types:
-    \list
-    \li jobject
-    \li jclass
-    \li jstring
-    \li jarray
-    \li jobjectArray
-    \li jbooleanArray
-    \li jbyteArray
-    \li jcharArray
-    \li jshortArray
-    \li jintArray
-    \li jlongArray
-    \li jfloatArray
-    \li jdoubleArray
-    \endlist
+    \section3 Object types
+    \table
+    \header
+        \li Type
+        \li Signature
+    \row
+        \li jobject
+        \li {1, 3} L\e<fully-qulified-name>};
+    \row
+        \li jclass
+    \row
+        \li jstring
+    \row
+        \li jobjectArray
+        \li [L\e<fully-qulified-name>;
+    \row
+        \li jarray
+        \li [\e<type>
+    \row
+        \li jbooleanArray
+        \li [Z
+    \row
+        \li jbyteArray
+        \li [B
+    \row
+        \li jcharArray
+        \li [C
+    \row
+        \li jshortArray
+        \li [S
+    \row
+        \li jintArray
+        \li [I
+    \row
+        \li jlongArray
+        \li [J
+    \row
+        \li jfloatArray
+        \li [F
+    \row
+        \li jdoubleArray
+        \li [D
+    \endtable
 
-    Primitive types:
-    \list
-    \li jboolean
-    \li jbyte
-    \li jchar
-    \li jshort
-    \li jint
-    \li jlong
-    \li jfloat
-    \li jdouble
-    \endlist
 
-    \section1 General Notes:
+    \section3 Primitive types
+    \table
+    \header
+        \li Type
+        \li Signature
+    \row
+        \li jboolean
+        \li Z
+    \row
+        \li jbyte
+        \li B
+    \row
+        \li jchar
+        \li C
+    \row
+       \li jshort
+       \li S
+    \row
+        \li jint
+        \li I
+    \row
+        \li jlong
+        \li J
+    \row
+        \li jfloat
+        \li F
+    \row
+        \li jdouble
+        \li D
+    \endtable
 
-    - Class name strings needs to be the fully-qualified class name, for example: "java/lang/String".
-    - Method signatures are written as "(Arguments)ReturnType"
-    - All object types are returned as a QJNIObject.
-
-    \section1 Handling Java exception:
-
-    When calling Java functions that might throw an exception, it is important that you handle and
-    clear out the exception before continuing.
-
-    \snippet code/src_androidextras_qjniobject.cpp Check for exceptions
+    \section3 Other
+    \table
+    \header
+        \li Type
+        \li Signature
+    \row
+        \li void
+        \li V
+    \endtable
 
     For more information about JNI see: \l http://docs.oracle.com/javase/7/docs/technotes/guides/jni/spec/jniTOC.html
 */
@@ -192,7 +331,7 @@ QT_BEGIN_NAMESPACE
 /*!
     \fn T QJNIObject::callMethod(const char *methodName) const
 
-    Calls the method \a methodName and returs the value.
+    Calls the method \a methodName and returns the value.
 
     \code
     QJNIObject myJavaString = ...;
@@ -228,7 +367,7 @@ QT_BEGIN_NAMESPACE
 /*!
     \fn T QJNIObject::callStaticMethod(jclass clazz, const char *methodName)
 
-    Calls the static method \a methodName on \a clazz and returns the value T.
+    Calls the static method \a methodName on \a clazz and returns the value.
 
     \code
     ...
@@ -265,8 +404,7 @@ QT_BEGIN_NAMESPACE
 /*!
     \fn T QJNIObject::callStaticMethod(jclass clazz, const char *methodName, const char *signature, ...)
 
-    Calls the static method \a methodName with \a signature on \a clazz and returns the value T,
-    unless T is void.
+    Calls the static method \a methodName with \a signature on \a clazz and returns the value.
 
     \code
     ...
@@ -453,7 +591,7 @@ QT_BEGIN_NAMESPACE
 /*!
     \fn T QJNIObject::object() const
 
-    Returns a jobject as type T.
+    Returns the object held by the QJNIObject as type T.
 
     \code
     QJNIObject string = QJNIObject::fromString("Hello, JNI");
@@ -477,7 +615,7 @@ QT_BEGIN_NAMESPACE
     \fn QString QJNIObject::toString() const
 
     Returns a QString with a string representation of the java object.
-    Calling this function on a Java String object is a convenient way of getting the actuall string
+    Calling this function on a Java String object is a convenient way of getting the actual string
     data.
 
     \code
