@@ -39,7 +39,7 @@
 **
 ****************************************************************************/
 
-#include "qjnienvironment.h"
+#include "qandroidjnienvironment.h"
 #include <QtCore/private/qjni_p.h>
 #include <QtCore/private/qjnihelpers_p.h>
 #include <QtCore/qthreadstorage.h>
@@ -47,65 +47,65 @@
 QT_BEGIN_NAMESPACE
 
 /*!
-    \class QJNIEnvironment
+    \class QAndroidJniEnvironment
     \inmodule QtAndroidExtras
-    \brief The QJNIEnvironment provides access to the JNI Environment.
+    \brief The QAndroidJniEnvironment provides access to the JNI Environment.
     \since 5.2
 */
 
 /*!
-    \fn QJNIEnvironment::QJNIEnvironment()
+    \fn QAndroidJniEnvironment::QAndroidJniEnvironment()
 
-    Constructs a new QJNIEnvironment object and attach the current thread to the Java VM.
+    Constructs a new QAndroidJniEnvironment object and attach the current thread to the Java VM.
 
-    \snippet code/src_androidextras_qjnienvironment.cpp Create QJNIEnvironment
+    \snippet code/src_androidextras_qandroidjnienvironment.cpp Create QAndroidJniEnvironment
 */
 
 /*!
-    \fn QJNIEnvironment::~QJNIEnvironment()
+    \fn QAndroidJniEnvironment::~QAndroidJniEnvironment()
 
-    Detaches the current thread from the Java VM and destroys the QJNIEnvironment object.
+    Detaches the current thread from the Java VM and destroys the QAndroidJniEnvironment object.
 */
 
 /*!
-    \fn JavaVM *QJNIEnvironment::javaVM()
+    \fn JavaVM *QAndroidJniEnvironment::javaVM()
 
     Returns the Java VM interface.
 */
 
 /*!
-    \fn JNIEnv *QJNIEnvironment::operator->()
+    \fn JNIEnv *QAndroidJniEnvironment::operator->()
 
-    Provides access to the QJNIEnvironment's JNIEnv pointer.
+    Provides access to the QAndroidJniEnvironment's JNIEnv pointer.
 */
 
 /*!
-    \fn QJNIEnvironment::operator JNIEnv *() const
+    \fn QAndroidJniEnvironment::operator JNIEnv *() const
 
     Returns the the JNI Environment pointer.
  */
 
 
-QJNIEnvironment::QJNIEnvironment()
+QAndroidJniEnvironment::QAndroidJniEnvironment()
     : d(new QJNIEnvironmentPrivate)
 {
 }
 
-QJNIEnvironment::~QJNIEnvironment()
+QAndroidJniEnvironment::~QAndroidJniEnvironment()
 {
 }
 
-JavaVM *QJNIEnvironment::javaVM()
+JavaVM *QAndroidJniEnvironment::javaVM()
 {
     return QtAndroidPrivate::javaVM();
 }
 
-JNIEnv *QJNIEnvironment::operator->()
+JNIEnv *QAndroidJniEnvironment::operator->()
 {
     return d->jniEnv;
 }
 
-QJNIEnvironment::operator JNIEnv*() const
+QAndroidJniEnvironment::operator JNIEnv*() const
 {
     return d->jniEnv;
 }

@@ -40,9 +40,9 @@
 ****************************************************************************/
 
 #include <QtTest/QtTest>
-#include <QtAndroidExtras/QJNIEnvironment>
+#include <QtAndroidExtras/QAndroidJniEnvironment>
 
-class tst_QJNIEnvironment : public QObject
+class tst_QAndroidJniEnvironment : public QObject
 {
     Q_OBJECT
 
@@ -54,14 +54,14 @@ public:
     static JavaVM *m_javaVM;
 };
 
-JavaVM *tst_QJNIEnvironment::m_javaVM = 0;
+JavaVM *tst_QAndroidJniEnvironment::m_javaVM = 0;
 
-void tst_QJNIEnvironment::jniEnv()
+void tst_QAndroidJniEnvironment::jniEnv()
 {
     QVERIFY(m_javaVM);
 
     {
-        QJNIEnvironment env;
+        QAndroidJniEnvironment env;
 
         // JNI environment should now be attached to the current thread
         JNIEnv *jni = 0;
@@ -82,16 +82,16 @@ void tst_QJNIEnvironment::jniEnv()
         env->ExceptionClear();
     }
 
-    // The environment should automatically be detached when QJNIEnvironment goes out of scope
+    // The environment should automatically be detached when QAndroidJniEnvironment goes out of scope
     JNIEnv *jni = 0;
     QCOMPARE(m_javaVM->GetEnv((void**)&jni, JNI_VERSION_1_6), JNI_EDETACHED);
 }
 
-void tst_QJNIEnvironment::javaVM()
+void tst_QAndroidJniEnvironment::javaVM()
 {
     QVERIFY(m_javaVM);
 
-    QJNIEnvironment env;
+    QAndroidJniEnvironment env;
     QCOMPARE(env.javaVM(), m_javaVM);
 
     JavaVM *vm = 0;
@@ -102,10 +102,10 @@ void tst_QJNIEnvironment::javaVM()
 Q_DECL_EXPORT jint JNICALL JNI_OnLoad(JavaVM *vm, void *reserved)
 {
     Q_UNUSED(reserved)
-    tst_QJNIEnvironment::m_javaVM = vm;
+    tst_QAndroidJniEnvironment::m_javaVM = vm;
     return JNI_VERSION_1_6;
 }
 
-QTEST_APPLESS_MAIN(tst_QJNIEnvironment)
+QTEST_APPLESS_MAIN(tst_QAndroidJniEnvironment)
 
-#include "tst_qjnienvironment.moc"
+#include "tst_qandroidjnienvironment.moc"

@@ -39,8 +39,8 @@
 **
 ****************************************************************************/
 
-#ifndef QJNIENVIRONMENT_H
-#define QJNIENVIRONMENT_H
+#ifndef QANDROIDJNIENVIRONMENT_H
+#define QANDROIDJNIENVIRONMENT_H
 
 #include <jni.h>
 #include <QtAndroidExtras/qandroidextrasglobal.h>
@@ -51,20 +51,20 @@ QT_BEGIN_NAMESPACE
 
 struct QJNIEnvironmentPrivate;
 
-class Q_ANDROIDEXTRAS_EXPORT QJNIEnvironment
+class Q_ANDROIDEXTRAS_EXPORT QAndroidJniEnvironment
 {
 public:
-    QJNIEnvironment();
-    ~QJNIEnvironment();
+    QAndroidJniEnvironment();
+    ~QAndroidJniEnvironment();
     static JavaVM *javaVM();
     JNIEnv *operator->();
     operator JNIEnv*() const;
 
 private:
-    Q_DISABLE_COPY(QJNIEnvironment)
+    Q_DISABLE_COPY(QAndroidJniEnvironment)
     QScopedPointer<QJNIEnvironmentPrivate> d;
 };
 
 QT_END_NAMESPACE
 
-#endif // QJNIENVIRONMENT_H
+#endif // QANDROIDJNIENVIRONMENT_H
