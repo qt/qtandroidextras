@@ -1,4 +1,4 @@
 CONFIG += testcase
 TARGET = tst_qandroidjnienvironment
-QT += testlib androidextras
+QT += testlib androidextras core-private
 SOURCES += tst_qandroidjnienvironment.cpp
