@@ -38,46 +38,15 @@
  **
  ****************************************************************************/
 
-//! [Working with lists]
-QStringList getTrackTitles(const QJNIObject &album) {
-    QStringList stringList;
-    QJNIObject list = album.callObjectMethod<jobject>("getTitles",
-                                                      "()Ljava/util/List;");
+//! [Create QAndroidJniEnvironment]
 
-    if (list.isValid()) {
-        const int size = list.callMethod<jint>("size");
-        for (int i = 0; i < size; ++i) {
-            QJNIObject title = list.callObjectMethod<jobject>("get", "(I)Ljava/lang/Object;", i);
-            stringList.append(title.toString());
-        }
-    }
-    return stringList;
-}
-//! [Working with lists]
-
-//! [QJNIObject scope]
-void function()
+bool exceptionCheck()
 {
-    QString helloString("Hello");
-    jstring myJString = 0;
-    {
-        QJNIObject string = QJNIObject::fromString(string);
-        myJString = string.object<jstring>();
-    }
-
-   // Ops! myJString is no longer valid.
+    /*
+      The QAndroidJniEnvironment attaches the current thread to the JavaVM on
+      creation and detach when it goes out of scope.
+     */
+    QAndroidJniEnvironment qjniEnv;
+    return qjniEnv->ExceptionCheck();
 }
-//! [QJNIObject scope]
-
-//! [Check for exceptions]
-void function()
-{
-    QJNIObject myString = QJNIObject::fromString("Hello");
-    jchar c = myString.callMethod<jchar>("charAt", "(I)C", 1000);
-    QJNIEnvironment env;
-    if (env->ExceptionCheck()) {
-        // Handle exception here.
-        env->ExceptionClear();
-    }
-}
-//! [Check for exceptions]
+//! [Create QAndroidJniEnvironment]

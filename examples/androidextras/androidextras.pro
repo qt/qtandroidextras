@@ -1,5 +1,7 @@
 TEMPLATE = subdirs
 android {
-    SUBDIRS += notification
-    EXAMPLE_FILES += notification
+    qtHaveModule(quick) {
+        SUBDIRS += notification
+        EXAMPLE_FILES += notification
+    }
 }

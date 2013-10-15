@@ -39,8 +39,8 @@
 **
 ****************************************************************************/
 
-#ifndef QJNIOBJECT_H
-#define QJNIOBJECT_H
+#ifndef QANDROIDJNIOBJECT_H
+#define QANDROIDJNIOBJECT_H
 
 #include <jni.h>
 #include <QtAndroidExtras/qandroidextrasglobal.h>
@@ -51,16 +51,16 @@ QT_BEGIN_NAMESPACE
 
 class QJNIObjectPrivate;
 
-class Q_ANDROIDEXTRAS_EXPORT QJNIObject
+class Q_ANDROIDEXTRAS_EXPORT QAndroidJniObject
 {
 public:
-    QJNIObject();
-    explicit QJNIObject(const char *className);
-    QJNIObject(const char *className, const char *sig, ...);
-    explicit QJNIObject(jclass clazz);
-    QJNIObject(jclass clazz, const char *sig, ...);
-    QJNIObject(jobject obj);
-    ~QJNIObject() { }
+    QAndroidJniObject();
+    explicit QAndroidJniObject(const char *className);
+    QAndroidJniObject(const char *className, const char *sig, ...);
+    explicit QAndroidJniObject(jclass clazz);
+    QAndroidJniObject(jclass clazz, const char *sig, ...);
+    QAndroidJniObject(jobject obj);
+    ~QAndroidJniObject() { }
 
     template <typename T>
     inline T object() const { return static_cast<T>(javaObject()); }
@@ -70,8 +70,8 @@ public:
     template <typename T>
     T callMethod(const char *methodName, const char *sig, ...) const;
     template <typename T>
-    QJNIObject callObjectMethod(const char *methodName) const;
-    QJNIObject callObjectMethod(const char *methodName,
+    QAndroidJniObject callObjectMethod(const char *methodName) const;
+    QAndroidJniObject callObjectMethod(const char *methodName,
                                 const char *sig,
                                 ...) const;
 
@@ -80,8 +80,8 @@ public:
     template <typename T>
     static T callStaticMethod(const char *className, const char *methodName, const char *sig, ...);
     template <typename T>
-    static QJNIObject callStaticObjectMethod(const char *className, const char *methodName);
-    static QJNIObject callStaticObjectMethod(const char *className,
+    static QAndroidJniObject callStaticObjectMethod(const char *className, const char *methodName);
+    static QAndroidJniObject callStaticObjectMethod(const char *className,
                                              const char *methodName,
                                              const char *sig, ...);
     template <typename T>
@@ -89,32 +89,32 @@ public:
     template <typename T>
     static T callStaticMethod(jclass clazz, const char *methodName, const char *sig, ...);
     template <typename T>
-    static QJNIObject callStaticObjectMethod(jclass clazz, const char *methodName);
-    static QJNIObject callStaticObjectMethod(jclass clazz,
+    static QAndroidJniObject callStaticObjectMethod(jclass clazz, const char *methodName);
+    static QAndroidJniObject callStaticObjectMethod(jclass clazz,
                                              const char *methodName,
                                              const char *sig, ...);
     template <typename T>
     T getField(const char *fieldName) const;
     template <typename T>
-    QJNIObject getObjectField(const char *fieldName) const;
+    QAndroidJniObject getObjectField(const char *fieldName) const;
     template <typename T>
-    QJNIObject getObjectField(const char *fieldName, const char *sig) const;
+    QAndroidJniObject getObjectField(const char *fieldName, const char *sig) const;
     template <typename T>
     void setField(const char *fieldName, T value);
     template <typename T>
     void setField(const char *fieldName, const char *sig, T value);
     template <typename T>
-    static QJNIObject getStaticObjectField(const char *className, const char *fieldName);
+    static QAndroidJniObject getStaticObjectField(const char *className, const char *fieldName);
     template <typename T>
-    static QJNIObject getStaticObjectField(const char *className,
+    static QAndroidJniObject getStaticObjectField(const char *className,
                                            const char *fieldName,
                                            const char *sig);
     template <typename T>
     static T getStaticField(const char *className, const char *fieldName);
     template <typename T>
-    static QJNIObject getStaticObjectField(jclass clazz, const char *fieldName);
+    static QAndroidJniObject getStaticObjectField(jclass clazz, const char *fieldName);
     template <typename T>
-    static QJNIObject getStaticObjectField(jclass clazz,
+    static QAndroidJniObject getStaticObjectField(jclass clazz,
                                            const char *fieldName,
                                            const char *sig);
     template <typename T>
@@ -132,71 +132,71 @@ public:
     template <typename T>
     static void setStaticField(jclass clazz, const char *fieldName, T value);
 
-    static QJNIObject fromString(const QString &string);
+    static QAndroidJniObject fromString(const QString &string);
     QString toString() const;
 
     static bool isClassAvailable(const char *className);
     bool isValid() const;
 
     template <typename T>
-    inline QJNIObject &operator=(T o)
+    inline QAndroidJniObject &operator=(T o)
     {
         assign(static_cast<jobject>(o));
         return *this;
     }
 
 private:
-    friend bool operator==(const QJNIObject &, const QJNIObject &);
-    friend bool operator!=(const QJNIObject &, const QJNIObject &);
-    template <typename T> friend bool operator!=(const QJNIObject &, T);
-    template <typename T> friend bool operator==(const QJNIObject &, T);
-    template <typename T> friend bool operator!=(T, const QJNIObject &);
-    template <typename T> friend bool operator==(T, const QJNIObject &);
+    friend bool operator==(const QAndroidJniObject &, const QAndroidJniObject &);
+    friend bool operator!=(const QAndroidJniObject &, const QAndroidJniObject &);
+    template <typename T> friend bool operator!=(const QAndroidJniObject &, T);
+    template <typename T> friend bool operator==(const QAndroidJniObject &, T);
+    template <typename T> friend bool operator!=(T, const QAndroidJniObject &);
+    template <typename T> friend bool operator==(T, const QAndroidJniObject &);
 
-    QJNIObject(const QJNIObjectPrivate &o);
+    QAndroidJniObject(const QJNIObjectPrivate &o);
 
     void assign(jobject o);
     jobject javaObject() const;
     bool isSameObject(jobject obj) const;
-    bool isSameObject(const QJNIObject &obj) const;
+    bool isSameObject(const QAndroidJniObject &obj) const;
 
     QSharedPointer<QJNIObjectPrivate> d;
 };
 
-inline bool operator==(const QJNIObject &obj1, const QJNIObject &obj2)
+inline bool operator==(const QAndroidJniObject &obj1, const QAndroidJniObject &obj2)
 {
     return obj1.isSameObject(obj2);
 }
 
-inline bool operator!=(const QJNIObject &obj1, const QJNIObject &obj2)
+inline bool operator!=(const QAndroidJniObject &obj1, const QAndroidJniObject &obj2)
 {
     return !obj1.isSameObject(obj2);
 }
 
 template <typename T>
-inline bool operator==(const QJNIObject &obj1, T obj2)
+inline bool operator==(const QAndroidJniObject &obj1, T obj2)
 {
     return obj1.isSameObject(static_cast<jobject>(obj2));
 }
 
 template <typename T>
-inline bool operator==(T obj1, const QJNIObject &obj2)
+inline bool operator==(T obj1, const QAndroidJniObject &obj2)
 {
     return obj2.isSameObject(static_cast<jobject>(obj1));
 }
 
 template <typename T>
-inline bool operator!=(const QJNIObject &obj1, T obj2)
+inline bool operator!=(const QAndroidJniObject &obj1, T obj2)
 {
     return !obj1.isSameObject(static_cast<jobject>(obj2));
 }
 
 template <typename T>
-inline bool operator!=(T obj1, const QJNIObject &obj2)
+inline bool operator!=(T obj1, const QAndroidJniObject &obj2)
 {
     return !obj2.isSameObject(static_cast<jobject>(obj1));
 }
 
 QT_END_NAMESPACE
 
-#endif // QJNIOBJECT_H
+#endif // QANDROIDJNIOBJECT_H

@@ -1,7 +1,7 @@
 HEADERS += \
-           $$PWD/qjniobject.h \
-           $$PWD/qjnienvironment.h
+           $$PWD/qandroidjniobject.h \
+           $$PWD/qandroidjnienvironment.h
 
 SOURCES += \
-           $$PWD/qjniobject.cpp \
-           $$PWD/qjnienvironment.cpp
+           $$PWD/qandroidjniobject.cpp \
+           $$PWD/qandroidjnienvironment.cpp

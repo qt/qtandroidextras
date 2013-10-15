@@ -3,7 +3,7 @@
 ** Copyright (C) 2013 Digia Plc and/or its subsidiary(-ies).
 ** Contact: http://www.qt-project.org/legal
 **
-** This file is part of the QtWinExtras module of the Qt Toolkit.
+** This file is part of the test suite of the Qt Toolkit.
 **
 ** $QT_BEGIN_LICENSE:LGPL$
 ** Commercial License Usage
@@ -39,23 +39,73 @@
 **
 ****************************************************************************/
 
-#ifndef ANDROIDJNIBINDINGS_H
-#define ANDROIDJNIBINDINGS_H
+#include <QtTest/QtTest>
+#include <QtAndroidExtras/QAndroidJniEnvironment>
 
-#include <QtAndroidExtras/QJNIObject>
-
-class AndroidJNIBindings
+class tst_QAndroidJniEnvironment : public QObject
 {
+    Q_OBJECT
+
+private slots:
+    void jniEnv();
+    void javaVM();
+
 public:
-    static jclass notificationClientClass()
-    {
-        return m_notificationClientClass;
-    }
-
-    static void detectNotificationClientClass(JNIEnv *environment);
-
-private:
-    static jclass m_notificationClientClass;
+    static JavaVM *m_javaVM;
 };
 
-#endif // ANDROIDJNIBINDINGS_H
+JavaVM *tst_QAndroidJniEnvironment::m_javaVM = 0;
+
+void tst_QAndroidJniEnvironment::jniEnv()
+{
+    QVERIFY(m_javaVM);
+
+    {
+        QAndroidJniEnvironment env;
+
+        // JNI environment should now be attached to the current thread
+        JNIEnv *jni = 0;
+        QCOMPARE(m_javaVM->GetEnv((void**)&jni, JNI_VERSION_1_6), JNI_OK);
+
+        JNIEnv *e = env;
+        QVERIFY(e);
+
+        QCOMPARE(env->GetVersion(), JNI_VERSION_1_6);
+
+        // try to find an existing class
+        QVERIFY(env->FindClass("java/lang/Object"));
+        QVERIFY(!env->ExceptionCheck());
+
+        // try to find a nonexistent class
+        QVERIFY(!env->FindClass("this/doesnt/Exist"));
+        QVERIFY(env->ExceptionCheck());
+        env->ExceptionClear();
+    }
+
+    // The environment should automatically be detached when QAndroidJniEnvironment goes out of scope
+    JNIEnv *jni = 0;
+    QCOMPARE(m_javaVM->GetEnv((void**)&jni, JNI_VERSION_1_6), JNI_EDETACHED);
+}
+
+void tst_QAndroidJniEnvironment::javaVM()
+{
+    QVERIFY(m_javaVM);
+
+    QAndroidJniEnvironment env;
+    QCOMPARE(env.javaVM(), m_javaVM);
+
+    JavaVM *vm = 0;
+    QCOMPARE(env->GetJavaVM(&vm), JNI_OK);
+    QCOMPARE(env.javaVM(), vm);
+}
+
+Q_DECL_EXPORT jint JNICALL JNI_OnLoad(JavaVM *vm, void *reserved)
+{
+    Q_UNUSED(reserved)
+    tst_QAndroidJniEnvironment::m_javaVM = vm;
+    return JNI_VERSION_1_6;
+}
+
+QTEST_APPLESS_MAIN(tst_QAndroidJniEnvironment)
+
+#include "tst_qandroidjnienvironment.moc"

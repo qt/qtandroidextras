@@ -1,4 +1,5 @@
 TEMPLATE = subdirs
 SUBDIRS += \
-        qjnienvironment \
-        qjniobject
+        cmake \
+        qandroidjnienvironment \
+        qandroidjniobject

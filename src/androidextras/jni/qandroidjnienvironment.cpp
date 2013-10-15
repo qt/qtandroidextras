@@ -3,7 +3,7 @@
 ** Copyright (C) 2013 Digia Plc and/or its subsidiary(-ies).
 ** Contact: http://www.qt-project.org/legal
 **
-** This file is part of the test suite of the Qt Toolkit.
+** This file is part of the Qt Toolkit.
 **
 ** $QT_BEGIN_LICENSE:LGPL$
 ** Commercial License Usage
@@ -39,73 +39,75 @@
 **
 ****************************************************************************/
 
-#include <QtTest/QtTest>
-#include <QtAndroidExtras/QJNIEnvironment>
+#include "qandroidjnienvironment.h"
+#include <QtCore/private/qjni_p.h>
+#include <QtCore/private/qjnihelpers_p.h>
+#include <QtCore/qthreadstorage.h>
 
-class tst_QJNIEnvironment : public QObject
+QT_BEGIN_NAMESPACE
+
+/*!
+    \class QAndroidJniEnvironment
+    \inmodule QtAndroidExtras
+    \brief The QAndroidJniEnvironment provides access to the JNI Environment.
+    \since 5.2
+*/
+
+/*!
+    \fn QAndroidJniEnvironment::QAndroidJniEnvironment()
+
+    Constructs a new QAndroidJniEnvironment object and attach the current thread to the Java VM.
+
+    \snippet code/src_androidextras_qandroidjnienvironment.cpp Create QAndroidJniEnvironment
+*/
+
+/*!
+    \fn QAndroidJniEnvironment::~QAndroidJniEnvironment()
+
+    Detaches the current thread from the Java VM and destroys the QAndroidJniEnvironment object.
+*/
+
+/*!
+    \fn JavaVM *QAndroidJniEnvironment::javaVM()
+
+    Returns the Java VM interface.
+*/
+
+/*!
+    \fn JNIEnv *QAndroidJniEnvironment::operator->()
+
+    Provides access to the QAndroidJniEnvironment's JNIEnv pointer.
+*/
+
+/*!
+    \fn QAndroidJniEnvironment::operator JNIEnv *() const
+
+    Returns the the JNI Environment pointer.
+ */
+
+
+QAndroidJniEnvironment::QAndroidJniEnvironment()
+    : d(new QJNIEnvironmentPrivate)
 {
-    Q_OBJECT
-
-private slots:
-    void jniEnv();
-    void javaVM();
-
-public:
-    static JavaVM *m_javaVM;
-};
-
-JavaVM *tst_QJNIEnvironment::m_javaVM = 0;
-
-void tst_QJNIEnvironment::jniEnv()
-{
-    QVERIFY(m_javaVM);
-
-    {
-        QJNIEnvironment env;
-
-        // JNI environment should now be attached to the current thread
-        JNIEnv *jni = 0;
-        QCOMPARE(m_javaVM->GetEnv((void**)&jni, JNI_VERSION_1_6), JNI_OK);
-
-        JNIEnv *e = env;
-        QVERIFY(e);
-
-        QCOMPARE(env->GetVersion(), JNI_VERSION_1_6);
-
-        // try to find an existing class
-        QVERIFY(env->FindClass("java/lang/Object"));
-        QVERIFY(!env->ExceptionCheck());
-
-        // try to find a nonexistent class
-        QVERIFY(!env->FindClass("this/doesnt/Exist"));
-        QVERIFY(env->ExceptionCheck());
-        env->ExceptionClear();
-    }
-
-    // The environment should automatically be detached when QJNIEnvironment goes out of scope
-    JNIEnv *jni = 0;
-    QCOMPARE(m_javaVM->GetEnv((void**)&jni, JNI_VERSION_1_6), JNI_EDETACHED);
 }
 
-void tst_QJNIEnvironment::javaVM()
+QAndroidJniEnvironment::~QAndroidJniEnvironment()
 {
-    QVERIFY(m_javaVM);
-
-    QJNIEnvironment env;
-    QCOMPARE(env.javaVM(), m_javaVM);
-
-    JavaVM *vm = 0;
-    QCOMPARE(env->GetJavaVM(&vm), JNI_OK);
-    QCOMPARE(env.javaVM(), vm);
 }
 
-Q_DECL_EXPORT jint JNICALL JNI_OnLoad(JavaVM *vm, void *reserved)
+JavaVM *QAndroidJniEnvironment::javaVM()
 {
-    Q_UNUSED(reserved)
-    tst_QJNIEnvironment::m_javaVM = vm;
-    return JNI_VERSION_1_6;
+    return QtAndroidPrivate::javaVM();
 }
 
-QTEST_APPLESS_MAIN(tst_QJNIEnvironment)
+JNIEnv *QAndroidJniEnvironment::operator->()
+{
+    return d->jniEnv;
+}
 
-#include "tst_qjnienvironment.moc"
+QAndroidJniEnvironment::operator JNIEnv*() const
+{
+    return d->jniEnv;
+}
+
+QT_END_NAMESPACE
