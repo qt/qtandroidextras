@@ -144,8 +144,8 @@ QT_BEGIN_NAMESPACE
     release it when you are done, or construct a new QAndroidJniObject and let it manage the lifetime of the Java object.
     \sa object()
 
-    \note The QAndroidJniObject does only manage it's own references, if you construct a QAndroidJniObject from a
-          global reference that reference will not be released by the QAndroidJniObject.
+    \note The QAndroidJniObject does only manage its own references, if you construct a QAndroidJniObject from a
+          global or local reference that reference will not be released by the QAndroidJniObject.
 
     \section1 JNI Types
 
