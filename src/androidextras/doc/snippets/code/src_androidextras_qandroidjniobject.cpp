@@ -103,10 +103,11 @@ void registerNativeMethods() {
 
     QAndroidJniObject javaClass("my/java/project/FooJavaClass");
     QAndroidJniEnvironment env;
-    env->RegisterNatives(env->GetObjectClass(javaClass),
+    jclass objectClass = env->GetObjectClass(javaClass)
+    env->RegisterNatives(objectClass,
                          methods,
                          sizeof(methods) / sizeof(methods[0]));
-
+    env->DeleteLocalRef(objectClass);
 }
 
 void foo()
