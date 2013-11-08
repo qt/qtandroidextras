@@ -97,12 +97,7 @@ private slots:
     void getIntField();
 
     void cleanupTestCase();
-
-public:
-    static jclass m_activityDelegateClass;
 };
-
-jclass tst_QAndroidJniObject::m_activityDelegateClass = 0;
 
 tst_QAndroidJniObject::tst_QAndroidJniObject()
 {
@@ -686,7 +681,7 @@ void tst_QAndroidJniObject::getBooleanField()
 {
     QVERIFY(m_activityDelegateClass);
 
-    QAndroidJniObject obj(m_activityDelegateClass);
+    QAndroidJniObject obj("org/qtproject/qt5/android/QtActivityDelegate");
 
     QVERIFY(obj.isValid());
     QVERIFY(!obj.getField<jboolean>("m_fullScreen"));
@@ -694,35 +689,12 @@ void tst_QAndroidJniObject::getBooleanField()
 
 void tst_QAndroidJniObject::getIntField()
 {
-    QVERIFY(m_activityDelegateClass);
-
-    QAndroidJniObject obj(m_activityDelegateClass);
+    QAndroidJniObject obj("org/qtproject/qt5/android/QtActivityDelegate");
 
     QVERIFY(obj.isValid());
     jint res = obj.getField<jint>("m_currentRotation");
 
     QCOMPARE(res, -1);
-}
-
-Q_DECL_EXPORT jint JNICALL JNI_OnLoad(JavaVM *vm, void *reserved)
-{
-    typedef union {
-        JNIEnv *nenv;
-        void *venv;
-    } _JNIEnv;
-
-    _JNIEnv uenv;
-    uenv.venv = Q_NULLPTR;
-
-    if (vm->GetEnv(&uenv.venv, JNI_VERSION_1_6) != JNI_OK)
-        return JNI_ERR;
-
-    JNIEnv *env = uenv.nenv;
-
-    jclass clazz = env->FindClass("org/qtproject/qt5/android/QtActivityDelegate");
-    tst_QAndroidJniObject::m_activityDelegateClass = (jclass)env->NewGlobalRef(clazz);
-
-    return JNI_VERSION_1_6;
 }
 
 QTEST_APPLESS_MAIN(tst_QAndroidJniObject)
