@@ -33,6 +33,7 @@ headerdirs += ..
 sourcedirs += ..
 exampledirs += ../../../examples/androidextras \
                snippets
+examples.fileextensions += *.java
 
 # Specify example install dir under QT_INSTALL_EXAMPLES
 examplesinstallpath = androidextras
