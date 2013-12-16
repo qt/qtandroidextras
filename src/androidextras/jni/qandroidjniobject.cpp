@@ -156,7 +156,7 @@ QT_BEGIN_NAMESPACE
         \li Signature
     \row
         \li jobject
-        \li {1, 3} L\e<fully-qulified-name>};
+        \li {1, 3} L\e<fully-qulified-name>;
     \row
         \li jclass
     \row
@@ -359,7 +359,7 @@ QT_BEGIN_NAMESPACE
 
     \code
     QAndroidJniObject myJavaString; ==> "Hello, Java"
-    QAndroidJniObject mySubstring = myJavaString.callObjectMethod<jstring>("substring", "(II)Ljava/lang/String;" 7, 10);
+    QAndroidJniObject mySubstring = myJavaString.callObjectMethod("substring", "(II)Ljava/lang/String;" 7, 10);
     \endcode
 */
 

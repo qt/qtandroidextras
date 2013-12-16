@@ -41,13 +41,13 @@
 //! [Working with lists]
 QStringList getTrackTitles(const QAndroidJniObject &album) {
     QStringList stringList;
-    QAndroidJniObject list = album.callObjectMethod<jobject>("getTitles",
+    QAndroidJniObject list = album.callObjectMethod("getTitles",
                                                       "()Ljava/util/List;");
 
     if (list.isValid()) {
         const int size = list.callMethod<jint>("size");
         for (int i = 0; i < size; ++i) {
-            QAndroidJniObject title = list.callObjectMethod<jobject>("get", "(I)Ljava/lang/Object;", i);
+            QAndroidJniObject title = list.callObjectMethod("get", "(I)Ljava/lang/Object;", i);
             stringList.append(title.toString());
         }
     }
@@ -56,12 +56,12 @@ QStringList getTrackTitles(const QAndroidJniObject &album) {
 //! [Working with lists]
 
 //! [QAndroidJniObject scope]
-void function()
+void functionScope()
 {
     QString helloString("Hello");
     jstring myJString = 0;
     {
-        QAndroidJniObject string = QAndroidJniObject::fromString(string);
+        QAndroidJniObject string = QAndroidJniObject::fromString(helloString);
         myJString = string.object<jstring>();
     }
 
@@ -70,7 +70,7 @@ void function()
 //! [QAndroidJniObject scope]
 
 //! [Check for exceptions]
-void function()
+void functionException()
 {
     QAndroidJniObject myString = QAndroidJniObject::fromString("Hello");
     jchar c = myString.callMethod<jchar>("charAt", "(I)C", 1000);
@@ -103,7 +103,7 @@ void registerNativeMethods() {
 
     QAndroidJniObject javaClass("my/java/project/FooJavaClass");
     QAndroidJniEnvironment env;
-    jclass objectClass = env->GetObjectClass(javaClass)
+    jclass objectClass = env->GetObjectClass(javaClass.object<jobject>());
     env->RegisterNatives(objectClass,
                          methods,
                          sizeof(methods) / sizeof(methods[0]));
@@ -112,8 +112,8 @@ void registerNativeMethods() {
 
 void foo()
 {
-    QAndroidJniObject::callStaticMethod("my/java/project/FooJavaClass", "foo", "(I)V", 10);  // Output: 10 < 100
-    QAndroidJniObject::callStaticMethod("my/java/project/FooJavaClass", "foo", "(I)V", 100); // Output: 100 >= 100
+    QAndroidJniObject::callStaticMethod<void>("my/java/project/FooJavaClass", "foo", "(I)V", 10);  // Output: 10 < 100
+    QAndroidJniObject::callStaticMethod<void>("my/java/project/FooJavaClass", "foo", "(I)V", 100); // Output: 100 >= 100
 }
 
 //! [Registering native methods]
