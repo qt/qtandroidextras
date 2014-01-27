@@ -156,14 +156,14 @@ QT_BEGIN_NAMESPACE
         \li Signature
     \row
         \li jobject
-        \li {1, 3} L\e<fully-qulified-name>;
+        \li {1, 3} L\e<fully-qualified-name>;
     \row
         \li jclass
     \row
         \li jstring
     \row
         \li jobjectArray
-        \li [L\e<fully-qulified-name>;
+        \li [L\e<fully-qualified-name>;
     \row
         \li jarray
         \li [\e<type>
