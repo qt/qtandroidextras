@@ -2,4 +2,5 @@ TEMPLATE = subdirs
 SUBDIRS += \
         cmake \
         qandroidjnienvironment \
-        qandroidjniobject
+        qandroidjniobject \
+        qandroidfunctions

@@ -1,5 +1,7 @@
 include($QT_INSTALL_DOCS/global/qt-module-defaults.qdocconf)
 
+Cpp.ignoretokens += Q_ANDROIDEXTRAS_EXPORT
+
 project = QtAndroidExtras
 description = Qt Android Extras Reference Documentation
 url = http://qt-project.org/doc/qt-$QT_VER
@@ -19,10 +21,10 @@ qhp.QtAndroidExtras.filterAttributes = qtandroidextras $QT_VERSION qtrefdoc
 qhp.QtAndroidExtras.customFilters.Qt.name = QtAndroidExtras $QT_VERSION
 qhp.QtAndroidExtras.customFilters.Qt.filterAttributes = qtandroidextras $QT_VERSION
 
-qhp.QtAndroidExtras.subprojects = classes
-qhp.QtAndroidExtras.subprojects.classes.title = C++ Classes
+qhp.QtAndroidExtras.subprojects = classes examples
+qhp.QtAndroidExtras.subprojects.classes.title = C++ Classes and Namespaces
 qhp.QtAndroidExtras.subprojects.classes.indexTitle = Qt Android Extras C++ Classes
-qhp.QtAndroidExtras.subprojects.classes.selectors = class fake:headerfile
+qhp.QtAndroidExtras.subprojects.classes.selectors = class function namespace fake:headerfile
 qhp.QtAndroidExtras.subprojects.classes.sortPages = true
 qhp.QtAndroidExtras.subprojects.examples.title = Examples
 qhp.QtAndroidExtras.subprojects.examples.indexTitle = Qt Android Extras Examples
