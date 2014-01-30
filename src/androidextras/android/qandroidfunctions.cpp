@@ -66,4 +66,15 @@ QAndroidJniObject QtAndroid::androidActivity()
     return QtAndroidPrivate::activity();
 }
 
+/*!
+    \since 5.3
+    \fn int QtAndroid::androidSdkVersion()
+
+    Returns the Android SDK version. This is also known as the API level.
+*/
+int QtAndroid::androidSdkVersion()
+{
+    return QtAndroidPrivate::androidSdkVersion();
+}
+
 QT_END_NAMESPACE

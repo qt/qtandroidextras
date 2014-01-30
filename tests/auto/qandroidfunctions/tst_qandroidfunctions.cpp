@@ -46,8 +46,14 @@ class tst_QAndroidFunctions : public QObject
 {
     Q_OBJECT
 private slots:
+    void testAndroidSdkVersion();
     void testAndroidActivity();
 };
+
+void tst_QAndroidFunctions::testAndroidSdkVersion()
+{
+    QVERIFY(QtAndroid::androidSdkVersion() > 0);
+}
 
 void tst_QAndroidFunctions::testAndroidActivity()
 {

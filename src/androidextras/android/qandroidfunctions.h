@@ -54,6 +54,7 @@ QT_BEGIN_NAMESPACE
 namespace QtAndroid
 {
     Q_ANDROIDEXTRAS_EXPORT QAndroidJniObject androidActivity();
+    Q_ANDROIDEXTRAS_EXPORT int androidSdkVersion();
 }
 
 QT_END_NAMESPACE
