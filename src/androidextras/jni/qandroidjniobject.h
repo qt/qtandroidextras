@@ -97,7 +97,9 @@ public:
     T getField(const char *fieldName) const;
     template <typename T>
     QAndroidJniObject getObjectField(const char *fieldName) const;
+    // ### Qt 6 remove templated version
     template <typename T>
+    QAndroidJniObject getObjectField(const char *fieldName, const char *sig) const;
     QAndroidJniObject getObjectField(const char *fieldName, const char *sig) const;
     template <typename T>
     void setField(const char *fieldName, T value);
@@ -105,7 +107,11 @@ public:
     void setField(const char *fieldName, const char *sig, T value);
     template <typename T>
     static QAndroidJniObject getStaticObjectField(const char *className, const char *fieldName);
+    // ### Qt 6 remove templated version
     template <typename T>
+    static QAndroidJniObject getStaticObjectField(const char *className,
+                                           const char *fieldName,
+                                           const char *sig);
     static QAndroidJniObject getStaticObjectField(const char *className,
                                            const char *fieldName,
                                            const char *sig);
@@ -113,7 +119,11 @@ public:
     static T getStaticField(const char *className, const char *fieldName);
     template <typename T>
     static QAndroidJniObject getStaticObjectField(jclass clazz, const char *fieldName);
+    // ### Qt 6 remove templated version
     template <typename T>
+    static QAndroidJniObject getStaticObjectField(jclass clazz,
+                                           const char *fieldName,
+                                           const char *sig);
     static QAndroidJniObject getStaticObjectField(jclass clazz,
                                            const char *fieldName,
                                            const char *sig);

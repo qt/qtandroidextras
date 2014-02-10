@@ -1469,6 +1469,11 @@ jdouble QAndroidJniObject::getField<jdouble>(const char *fieldName) const
     return d->getField<jdouble>(fieldName);
 }
 
+QAndroidJniObject QAndroidJniObject::getObjectField(const char *fieldName, const char *sig) const
+{
+    return d->getObjectField(fieldName, sig);
+}
+
 template <>
 QAndroidJniObject QAndroidJniObject::getObjectField<jobject>(const char *fieldName, const char *sig) const
 {
@@ -1750,6 +1755,13 @@ jdouble QAndroidJniObject::getStaticField<jdouble>(const char *className, const 
     return QJNIObjectPrivate::getStaticField<jdouble>(className, fieldName);
 }
 
+QAndroidJniObject QAndroidJniObject::getStaticObjectField(jclass clazz,
+                                                          const char *fieldName,
+                                                          const char *sig)
+{
+    return QJNIObjectPrivate::getStaticObjectField(clazz, fieldName, sig);
+}
+
 template <>
 QAndroidJniObject QAndroidJniObject::getStaticObjectField<jobject>(jclass clazz,
                                                      const char *fieldName,
@@ -1890,6 +1902,13 @@ QAndroidJniObject QAndroidJniObject::getStaticObjectField<jdoubleArray>(const ch
                                                           const char *fieldName)
 {
     return QJNIObjectPrivate::getStaticObjectField(className, fieldName, "[D");
+}
+
+QAndroidJniObject QAndroidJniObject::getStaticObjectField(const char *className,
+                                                          const char *fieldName,
+                                                          const char *sig)
+{
+    return QJNIObjectPrivate::getStaticObjectField(className, fieldName, sig);
 }
 
 template <>
