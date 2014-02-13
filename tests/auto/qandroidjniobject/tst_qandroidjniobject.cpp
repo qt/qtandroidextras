@@ -199,9 +199,11 @@ void tst_QAndroidJniObject::compareOperatorTests()
     QString str("hello!");
     QAndroidJniObject stringObject = QAndroidJniObject::fromString(str);
 
+    jobject obj = stringObject.object();
     jobject jobj = stringObject.object<jobject>();
     jstring jsobj = stringObject.object<jstring>();
 
+    QVERIFY(obj == stringObject);
     QVERIFY(jobj == stringObject);
     QVERIFY(stringObject == jobj);
     QVERIFY(jsobj == stringObject);

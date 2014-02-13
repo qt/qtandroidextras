@@ -64,6 +64,7 @@ public:
 
     template <typename T>
     inline T object() const { return static_cast<T>(javaObject()); }
+    inline jobject object() const { return javaObject(); }
 
     template <typename T>
     T callMethod(const char *methodName) const;
