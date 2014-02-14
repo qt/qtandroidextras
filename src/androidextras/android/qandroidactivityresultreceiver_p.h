@@ -39,33 +39,42 @@
 **
 ****************************************************************************/
 
-#ifndef QANDROIDFUNCTIONS_H
-#define QANDROIDFUNCTIONS_H
+#ifndef QANDROIDACTIVITYRESULTRECEIVER_P_H
+#define QANDROIDACTIVITYRESULTRECEIVER_P_H
 
-#if 0
-#pragma qt_class(QtAndroid)
-#endif
+//
+//  W A R N I N G
+//  -------------
+//
+// This file is not part of the Qt API.  It exists purely as an
+// implementation detail.  This header file may change from version to
+// version without notice, or even be removed.
+//
+// We mean it.
+//
 
-#include <QtAndroidExtras/qandroidextrasglobal.h>
-#include <QtAndroidExtras/qandroidjniobject.h>
+#include <QtCore/qhash.h>
+#include <QtCore/private/qjnihelpers_p.h>
+#include "qandroidactivityresultreceiver.h"
 
 QT_BEGIN_NAMESPACE
 
-class QAndroidActivityResultReceiver;
-namespace QtAndroid
+class QAndroidActivityResultReceiverPrivate: public QtAndroidPrivate::ActivityResultListener
 {
-    Q_ANDROIDEXTRAS_EXPORT QAndroidJniObject androidActivity();
-    Q_ANDROIDEXTRAS_EXPORT int androidSdkVersion();
+public:
+    QAndroidActivityResultReceiver *q;
+    mutable QHash<int, int> localToGlobalRequestCode;
+    mutable QHash<int, int> globalToLocalRequestCode;
 
-    Q_ANDROIDEXTRAS_EXPORT void startIntentSender(const QAndroidJniObject &intentSender,
-                                                  int receiverRequestCode,
-                                                  QAndroidActivityResultReceiver *resultReceiver = 0);
-    Q_ANDROIDEXTRAS_EXPORT void startActivity(const QAndroidJniObject &intent,
-                                              int receiverRequestCode,
-                                              QAndroidActivityResultReceiver *resultReceiver = 0);
+    int globalRequestCode(int localRequestCode) const;
+    bool handleActivityResult(jint requestCode, jint resultCode, jobject data);
 
-}
+    static QAndroidActivityResultReceiverPrivate *get(QAndroidActivityResultReceiver *publicObject)
+    {
+        return publicObject->d.data();
+    }
+};
 
 QT_END_NAMESPACE
 
-#endif // QANDROIDFUNCTIONS_H
+#endif // QANDROIDACTIVITYRESULTRECEIVER_P_H

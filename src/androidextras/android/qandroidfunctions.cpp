@@ -40,6 +40,8 @@
 ****************************************************************************/
 
 #include "qandroidfunctions.h"
+#include "qandroidactivityresultreceiver.h"
+#include "qandroidactivityresultreceiver_p.h"
 
 #include <QtCore/private/qjnihelpers_p.h>
 
@@ -75,6 +77,82 @@ QAndroidJniObject QtAndroid::androidActivity()
 int QtAndroid::androidSdkVersion()
 {
     return QtAndroidPrivate::androidSdkVersion();
+}
+
+/*!
+  \since 5.3
+
+  Starts the activity given by \a intent and provides the result asynchronously through the
+  \a resultReceiver if this is non-null.
+
+  If \a resultReceiver is null, then the \c startActivity() method in the \c androidActivity()
+  will be called. Otherwise \c startActivityForResult() will be called.
+
+  The \a receiverRequestCode is a request code unique to the \a resultReceiver, and will be
+  returned along with the result, making it possible to use the same receiver for more than
+  one intent.
+
+  The \a optionsBundle provides additional options for the activity.
+ */
+void QtAndroid::startActivity(const QAndroidJniObject &intent,
+                              int receiverRequestCode,
+                              QAndroidActivityResultReceiver *resultReceiver)
+{
+    QAndroidJniObject activity = androidActivity();
+    if (resultReceiver != 0) {
+        QAndroidActivityResultReceiverPrivate *resultReceiverD = QAndroidActivityResultReceiverPrivate::get(resultReceiver);
+        activity.callMethod<void>("startActivityForResult",
+                                  "(Landroid/content/Intent;I)V",
+                                  intent.object<jobject>(),
+                                  resultReceiverD->globalRequestCode(receiverRequestCode));
+    } else {
+        activity.callMethod<void>("startActivity",
+                                  "(Landroid/content/Intent;)V",
+                                  intent.object<jobject>());
+    }
+}
+
+/*!
+  \since 5.3
+
+  Starts the activity given by \a intentSender and provides the result asynchronously through the
+  \a resultReceiver if this is non-null.
+
+  If \a resultReceiver is null, then the \c startIntentSender() method in the \c androidActivity()
+  will be called. Otherwise \c startIntentSenderForResult() will be called.
+
+  The \a receiverRequestCode is a request code unique to the \a resultReceiver, and will be
+  returned along with the result, making it possible to use the same receiver for more than
+  one intent.
+
+  The \a optionsBundle provides additional options for the activity.
+*/
+void QtAndroid::startIntentSender(const QAndroidJniObject &intentSender,
+                                  int receiverRequestCode,
+                                  QAndroidActivityResultReceiver *resultReceiver)
+{
+    QAndroidJniObject activity = androidActivity();
+    if (resultReceiver != 0) {
+        QAndroidActivityResultReceiverPrivate *resultReceiverD = QAndroidActivityResultReceiverPrivate::get(resultReceiver);
+        activity.callMethod<void>("startIntentSenderForResult",
+                                  "(Landroid/content/IntentSender;ILandroid/content/Intent;III)V",
+                                  intentSender.object<jobject>(),
+                                  resultReceiverD->globalRequestCode(receiverRequestCode),
+                                  0,  // fillInIntent
+                                  0,  // flagsMask
+                                  0,  // flagsValues
+                                  0); // extraFlags
+    } else {
+        activity.callMethod<void>("startIntentSender",
+                                  "(Landroid/content/Intent;Landroid/content/Intent;III)V",
+                                  intentSender.object<jobject>(),
+                                  0,  // fillInIntent
+                                  0,  // flagsMask
+                                  0,  // flagsValues
+                                  0); // extraFlags
+
+    }
+
 }
 
 QT_END_NAMESPACE

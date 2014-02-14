@@ -39,33 +39,29 @@
 **
 ****************************************************************************/
 
-#ifndef QANDROIDFUNCTIONS_H
-#define QANDROIDFUNCTIONS_H
+#ifndef QANDROIDACTIVITYRESULTRECEIVER_H
+#define QANDROIDACTIVITYRESULTRECEIVER_H
 
-#if 0
-#pragma qt_class(QtAndroid)
-#endif
-
-#include <QtAndroidExtras/qandroidextrasglobal.h>
-#include <QtAndroidExtras/qandroidjniobject.h>
+#include "qandroidextrasglobal.h"
+#include "qandroidjniobject.h"
 
 QT_BEGIN_NAMESPACE
 
-class QAndroidActivityResultReceiver;
-namespace QtAndroid
+class QAndroidActivityResultReceiverPrivate;
+class Q_ANDROIDEXTRAS_EXPORT QAndroidActivityResultReceiver
 {
-    Q_ANDROIDEXTRAS_EXPORT QAndroidJniObject androidActivity();
-    Q_ANDROIDEXTRAS_EXPORT int androidSdkVersion();
+public:
+    QAndroidActivityResultReceiver();
+    virtual ~QAndroidActivityResultReceiver();
+    virtual void handleActivityResult(int receiverRequestCode, int resultCode, const QAndroidJniObject &data) = 0;
 
-    Q_ANDROIDEXTRAS_EXPORT void startIntentSender(const QAndroidJniObject &intentSender,
-                                                  int receiverRequestCode,
-                                                  QAndroidActivityResultReceiver *resultReceiver = 0);
-    Q_ANDROIDEXTRAS_EXPORT void startActivity(const QAndroidJniObject &intent,
-                                              int receiverRequestCode,
-                                              QAndroidActivityResultReceiver *resultReceiver = 0);
+private:
+    friend class QAndroidActivityResultReceiverPrivate;
+    Q_DISABLE_COPY(QAndroidActivityResultReceiver)
 
-}
+    QScopedPointer<QAndroidActivityResultReceiverPrivate> d;
+};
 
 QT_END_NAMESPACE
 
-#endif // QANDROIDFUNCTIONS_H
+#endif // QANDROIDACTIVITYRESULTRECEIVER_H
