@@ -92,7 +92,6 @@ int QtAndroid::androidSdkVersion()
   returned along with the result, making it possible to use the same receiver for more than
   one intent.
 
-  The \a optionsBundle provides additional options for the activity.
  */
 void QtAndroid::startActivity(const QAndroidJniObject &intent,
                               int receiverRequestCode,
@@ -125,7 +124,6 @@ void QtAndroid::startActivity(const QAndroidJniObject &intent,
   returned along with the result, making it possible to use the same receiver for more than
   one intent.
 
-  The \a optionsBundle provides additional options for the activity.
 */
 void QtAndroid::startIntentSender(const QAndroidJniObject &intentSender,
                                   int receiverRequestCode,

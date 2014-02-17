@@ -85,6 +85,7 @@ bool QAndroidActivityResultReceiverPrivate::handleActivityResult(jint requestCod
 
 /*!
   \class QAndroidActivityResultReceiver
+  \inmodule QtAndroidExtras
   \since 5.3
   \brief Interface used for callbacks from onActivityResult() in the main Android activity.
 
