@@ -82,7 +82,7 @@ QT_BEGIN_NAMESPACE
 /*!
     \fn QAndroidJniEnvironment::operator JNIEnv *() const
 
-    Returns the the JNI Environment pointer.
+    Returns the JNI Environment pointer.
  */
 
 
