@@ -95,6 +95,7 @@ private slots:
     void getStaticCharField();
     void getBooleanField();
     void getIntField();
+    void isClassAvailable();
 
     void cleanupTestCase();
 };
@@ -713,6 +714,13 @@ void tst_QAndroidJniObject::getIntField()
     QVERIFY(obj.isValid());
     jint res = obj.getField<jint>("m_currentRotation");
     QCOMPARE(res, -1);
+}
+
+void tst_QAndroidJniObject::isClassAvailable()
+{
+    QVERIFY(QAndroidJniObject::isClassAvailable("java/lang/String"));
+    QVERIFY(!QAndroidJniObject::isClassAvailable("class/not/Available"));
+    QVERIFY(QAndroidJniObject::isClassAvailable("org/qtproject/qt5/android/QtActivityDelegate"));
 }
 
 QTEST_APPLESS_MAIN(tst_QAndroidJniObject)
