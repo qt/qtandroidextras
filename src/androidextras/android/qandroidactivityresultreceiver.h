@@ -42,8 +42,8 @@
 #ifndef QANDROIDACTIVITYRESULTRECEIVER_H
 #define QANDROIDACTIVITYRESULTRECEIVER_H
 
-#include "qandroidextrasglobal.h"
-#include "qandroidjniobject.h"
+#include <QtAndroidExtras/qandroidextrasglobal.h>
+#include <QtAndroidExtras/qandroidjniobject.h>
 
 QT_BEGIN_NAMESPACE
 

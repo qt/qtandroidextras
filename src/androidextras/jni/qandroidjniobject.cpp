@@ -464,12 +464,22 @@ QT_BEGIN_NAMESPACE
     \fn QAndroidJniObject QAndroidJniObject::getObjectField(const char *fieldName) const
 
     Retrieves the object of field \a fieldName.
+
+    \code
+    QAndroidJniObject field = jniObject.getObjectField<jstring>("FIELD_NAME");
+    \endcode
 */
 
 /*!
     \fn QAndroidJniObject QAndroidJniObject::getObjectField(const char *fieldName, const char *signature) const
 
     Retrieves the object from the field with \a signature and \a fieldName.
+
+    \note Since \b{Qt 5.3} this function can be used without a template type.
+
+    \code
+    QAndroidJniObject field = jniObject.getObjectField("FIELD_NAME", "Ljava/lang/String;");
+    \endcode
 */
 
 /*!
@@ -488,24 +498,42 @@ QT_BEGIN_NAMESPACE
     \fn QAndroidJniObject QAndroidJniObject::getStaticObjectField(const char *className, const char *fieldName)
 
     Retrieves the object from the field \a fieldName on the class \a className.
+
+    \code
+    QAndroidJniObject jobj = QAndroidJniObject::getStaticObjectField<jstring>("class/with/Fields", "FIELD_NAME");
+    \endcode
 */
 
 /*!
     \fn QAndroidJniObject QAndroidJniObject::getStaticObjectField(const char *className, const char *fieldName, const char *signature)
-
     Retrieves the object from the field with \a signature and \a fieldName on class \a className.
+
+    \note Since \b{Qt 5.3} this function can be used without a template type.
+
+    \code
+    QAndroidJniObject jobj = QAndroidJniObject::getStaticObjectField("class/with/Fields", "FIELD_NAME", "Ljava/lang/String;");
+    \endcode
 */
 
 /*!
     \fn QAndroidJniObject QAndroidJniObject::getStaticObjectField(jclass clazz, const char *fieldName)
 
     Retrieves the object from the field \a fieldName on \a clazz.
+
+    \code
+    QAndroidJniObject jobj = QAndroidJniObject::getStaticObjectField<jstring>(clazz, "FIELD_NAME");
+    \endcode
 */
 
 /*!
     \fn QAndroidJniObject QAndroidJniObject::getStaticObjectField(jclass clazz, const char *fieldName, const char *signature)
-
     Retrieves the object from the field with \a signature and \a fieldName on \a clazz.
+
+    \note Since \b{Qt 5.3} this function can be used without a template type.
+
+    \code
+    QAndroidJniObject jobj = QAndroidJniObject::getStaticObjectField(clazz, "FIELD_NAME", "Ljava/lang/String;");
+    \endcode
 */
 
 /*!
@@ -602,6 +630,13 @@ QT_BEGIN_NAMESPACE
     free it yourself.
 
     \snippet code/src_androidextras_qandroidjniobject.cpp QAndroidJniObject scope
+
+    \note Since \b{Qt 5.3} this function can be used without a template type, if the returned type
+    is a \c jobject.
+
+    \code
+    jobject object = jniObject.object();
+    \endcode
 */
 
 /*!

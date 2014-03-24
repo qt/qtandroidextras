@@ -64,7 +64,9 @@ public:
 
     template <typename T>
     inline T object() const { return static_cast<T>(javaObject()); }
+#ifndef Q_QDOC
     inline jobject object() const { return javaObject(); }
+#endif // Q_QDOC
 
     template <typename T>
     T callMethod(const char *methodName) const;
@@ -98,9 +100,11 @@ public:
     T getField(const char *fieldName) const;
     template <typename T>
     QAndroidJniObject getObjectField(const char *fieldName) const;
+#ifndef Q_QDOC
     // ### Qt 6 remove templated version
     template <typename T>
     QAndroidJniObject getObjectField(const char *fieldName, const char *sig) const;
+#endif // Q_QDOC
     QAndroidJniObject getObjectField(const char *fieldName, const char *sig) const;
     template <typename T>
     void setField(const char *fieldName, T value);
@@ -108,11 +112,13 @@ public:
     void setField(const char *fieldName, const char *sig, T value);
     template <typename T>
     static QAndroidJniObject getStaticObjectField(const char *className, const char *fieldName);
+#ifndef Q_QDOC
     // ### Qt 6 remove templated version
     template <typename T>
     static QAndroidJniObject getStaticObjectField(const char *className,
                                            const char *fieldName,
                                            const char *sig);
+#endif // Q_QDOC
     static QAndroidJniObject getStaticObjectField(const char *className,
                                            const char *fieldName,
                                            const char *sig);
@@ -120,11 +126,13 @@ public:
     static T getStaticField(const char *className, const char *fieldName);
     template <typename T>
     static QAndroidJniObject getStaticObjectField(jclass clazz, const char *fieldName);
+#ifndef Q_QDOC
     // ### Qt 6 remove templated version
     template <typename T>
     static QAndroidJniObject getStaticObjectField(jclass clazz,
                                            const char *fieldName,
                                            const char *sig);
+#endif // Q_QDOC
     static QAndroidJniObject getStaticObjectField(jclass clazz,
                                            const char *fieldName,
                                            const char *sig);
