@@ -286,7 +286,7 @@ QT_BEGIN_NAMESPACE
     and arguments.
 
     \code
-    jclass myClass = ...;
+    jclass myClazz = ...;
     QAndroidJniObject::QAndroidJniObject(myClazz, "(I)V", 3);
     \endcode
 */
@@ -339,7 +339,7 @@ QT_BEGIN_NAMESPACE
     \code
     ...
     QAndroidJniObject myJavaString1 = ...;
-    QAndroidJniObject myJavaString2 = myJavaString.callObjectMethod<jstring>("toString");
+    QAndroidJniObject myJavaString2 = myJavaString1.callObjectMethod<jstring>("toString");
     ...
     \endcode
 */
@@ -447,8 +447,8 @@ QT_BEGIN_NAMESPACE
     Retrieves the value of the field \a fieldName.
 
     \code
-    QAndroidJniObject volumeControll = ...;
-    jint fieldValue = obj.getField<jint>("MAX_VOLUME");
+    QAndroidJniObject volumeControl = ...;
+    jint fieldValue = volumeControl.getField<jint>("MAX_VOLUME");
     \endcode
 */
 
