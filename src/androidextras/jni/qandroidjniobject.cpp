@@ -927,6 +927,12 @@ QAndroidJniObject QAndroidJniObject::callObjectMethod<jbyteArray>(const char *me
 }
 
 template <>
+QAndroidJniObject QAndroidJniObject::callObjectMethod<jcharArray>(const char *methodName) const
+{
+    return d->callObjectMethod(methodName, "()[C");
+}
+
+template <>
 QAndroidJniObject QAndroidJniObject::callObjectMethod<jshortArray>(const char *methodName) const
 {
     return d->callObjectMethod(methodName, "()[S");
