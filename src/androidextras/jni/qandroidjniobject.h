@@ -155,6 +155,8 @@ public:
     static bool isClassAvailable(const char *className);
     bool isValid() const;
 
+    static QAndroidJniObject fromLocalRef(jobject obj);
+
     template <typename T>
     inline QAndroidJniObject &operator=(T o)
     {

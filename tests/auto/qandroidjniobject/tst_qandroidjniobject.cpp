@@ -105,6 +105,7 @@ private slots:
     void getIntField();
     void templateApiCheck();
     void isClassAvailable();
+    void fromLocalRef();
 
     void cleanupTestCase();
 };
@@ -1044,6 +1045,14 @@ void tst_QAndroidJniObject::isClassAvailable()
     QVERIFY(QAndroidJniObject::isClassAvailable("java/lang/String"));
     QVERIFY(!QAndroidJniObject::isClassAvailable("class/not/Available"));
     QVERIFY(QAndroidJniObject::isClassAvailable("org/qtproject/qt5/android/QtActivityDelegate"));
+}
+
+void tst_QAndroidJniObject::fromLocalRef()
+{
+    const int limit = 512 + 1;
+    QAndroidJniEnvironment env;
+    for (int i = 0; i != limit; ++i)
+        QAndroidJniObject o = QAndroidJniObject::fromLocalRef(env->FindClass("java/lang/String"));
 }
 
 QTEST_APPLESS_MAIN(tst_QAndroidJniObject)

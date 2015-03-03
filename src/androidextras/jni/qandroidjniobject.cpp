@@ -307,6 +307,8 @@ QT_BEGIN_NAMESPACE
     Note: The QAndroidJniObject will hold a reference to the Java object \a object
           and release it when destroyed. Any references to the Java object \a object
           outside QAndroidJniObject needs to be managed by the caller.
+
+    \sa fromLocalRef()
 */
 
 /*!
@@ -673,6 +675,22 @@ QT_BEGIN_NAMESPACE
     \endcode
 
     \sa toString()
+*/
+
+/*!
+    \fn QAndroidJniObject QAndroidJniObject::fromLocalRef(jobject localRef)
+    \since 5.7
+
+    Creates a QAndroidJniObject from the local JNI reference \a localRef.
+    This function takes ownership of \a localRef and frees it before returning.
+
+    \note Only call this function with a local JNI reference. For example, most raw JNI calls, through
+    the JNI environment, returns local references to a java object.
+
+    \code
+    jobject localRef = env->GetObjectArrayElement(array, index);
+    QAndroidJniObject element = QAndroidJniObject::fromLocalRef(localRef);
+    \endcode
 */
 
 /*!
@@ -2448,6 +2466,11 @@ bool QAndroidJniObject::isClassAvailable(const char *className)
 bool QAndroidJniObject::isValid() const
 {
     return d->isValid();
+}
+
+QAndroidJniObject QAndroidJniObject::fromLocalRef(jobject obj)
+{
+    return QJNIObjectPrivate::fromLocalRef(obj);
 }
 
 jobject QAndroidJniObject::javaObject() const
