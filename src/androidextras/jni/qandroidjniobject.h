@@ -159,10 +159,8 @@ public:
 private:
     friend bool operator==(const QAndroidJniObject &, const QAndroidJniObject &);
     friend bool operator!=(const QAndroidJniObject &, const QAndroidJniObject &);
-    template <typename T> friend bool operator!=(const QAndroidJniObject &, T);
-    template <typename T> friend bool operator==(const QAndroidJniObject &, T);
-    template <typename T> friend bool operator!=(T, const QAndroidJniObject &);
-    template <typename T> friend bool operator==(T, const QAndroidJniObject &);
+    template <typename T> friend bool operator!=(const QAndroidJniObject &, const QAndroidJniObject &);
+    template <typename T> friend bool operator==(const QAndroidJniObject &, const QAndroidJniObject &);
 
     QAndroidJniObject(const QJNIObjectPrivate &o);
 
@@ -184,28 +182,16 @@ inline bool operator!=(const QAndroidJniObject &obj1, const QAndroidJniObject &o
     return !obj1.isSameObject(obj2);
 }
 
-template <typename T>
-inline bool operator==(const QAndroidJniObject &obj1, T obj2)
+template<typename T>
+inline bool operator==(const QAndroidJniObject &obj1, const QAndroidJniObject &obj2)
 {
-    return obj1.isSameObject(static_cast<jobject>(obj2));
+    return obj1.isSameObject(obj2.object());
 }
 
 template <typename T>
-inline bool operator==(T obj1, const QAndroidJniObject &obj2)
+inline bool operator!=(const QAndroidJniObject &obj1, const QAndroidJniObject &obj2)
 {
-    return obj2.isSameObject(static_cast<jobject>(obj1));
-}
-
-template <typename T>
-inline bool operator!=(const QAndroidJniObject &obj1, T obj2)
-{
-    return !obj1.isSameObject(static_cast<jobject>(obj2));
-}
-
-template <typename T>
-inline bool operator!=(T obj1, const QAndroidJniObject &obj2)
-{
-    return !obj2.isSameObject(static_cast<jobject>(obj1));
+    return !obj1.isSameObject(obj2.object());
 }
 
 QT_END_NAMESPACE
