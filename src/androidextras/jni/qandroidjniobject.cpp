@@ -684,40 +684,10 @@ QT_BEGIN_NAMESPACE
 */
 
 /*!
-    \fn bool operator==(const QAndroidJniObject &o1, T o2)
-    \relates QAndroidJniObject
-
-    Returns true if both objects, \a o1 and \a o2, are referencing the same Java object, or if both
-    are NULL. In any other cases false will be returned.
-*/
-
-/*!
-    \fn bool operator==(T o1, const QAndroidJniObject &o2)
-    \relates QAndroidJniObject
-
-    Returns true if both objects, \a o1 and \a o2, are referencing the same Java object, or if both
-    are NULL. In any other cases false will be returned.
-*/
-
-/*!
     \fn bool operator!=(const QAndroidJniObject &o1, const QAndroidJniObject &o2)
     \relates QAndroidJniObject
 
     Returns true if \a o1 holds a reference to a different object then \a o2.
-*/
-
-/*!
-    \fn bool operator!=(const QAndroidJniObject &o1, T o2)
-    \relates QAndroidJniObject
-
-    Returns true if \a o1 holds a reference to a different object then \a o2.
-*/
-
-/*!
-    \fn bool operator!=(T o1, const QAndroidJniObject &o2)
-    \relates QAndroidJniObject
-
-    Returns true if \a o1 is referencing a different object then \a o2.
 */
 
 
