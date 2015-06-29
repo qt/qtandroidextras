@@ -92,11 +92,13 @@ public:
     T getField(const char *fieldName) const;
     template <typename T>
     QAndroidJniObject getObjectField(const char *fieldName) const;
-#ifndef Q_QDOC
-    // ### Qt 6 remove templated version
+#if QT_DEPRECATED_SINCE(5, 5)
+# ifndef Q_QDOC
     template <typename T>
+    QT_DEPRECATED_X("Use the non-template version instead")
     QAndroidJniObject getObjectField(const char *fieldName, const char *sig) const;
-#endif // Q_QDOC
+# endif // Q_QDOC
+#endif // QT_DEPRECATED_SINCE
     QAndroidJniObject getObjectField(const char *fieldName, const char *sig) const;
     template <typename T>
     void setField(const char *fieldName, T value);
@@ -104,13 +106,15 @@ public:
     void setField(const char *fieldName, const char *sig, T value);
     template <typename T>
     static QAndroidJniObject getStaticObjectField(const char *className, const char *fieldName);
-#ifndef Q_QDOC
-    // ### Qt 6 remove templated version
+#if QT_DEPRECATED_SINCE(5, 5)
+# ifndef Q_QDOC
     template <typename T>
+    QT_DEPRECATED_X("Use the non-template version instead")
     static QAndroidJniObject getStaticObjectField(const char *className,
-                                           const char *fieldName,
-                                           const char *sig);
-#endif // Q_QDOC
+                                                  const char *fieldName,
+                                                  const char *sig);
+# endif // Q_QDOC
+#endif // QT_DEPRECATED_SINCE
     static QAndroidJniObject getStaticObjectField(const char *className,
                                            const char *fieldName,
                                            const char *sig);
@@ -118,13 +122,15 @@ public:
     static T getStaticField(const char *className, const char *fieldName);
     template <typename T>
     static QAndroidJniObject getStaticObjectField(jclass clazz, const char *fieldName);
-#ifndef Q_QDOC
-    // ### Qt 6 remove templated version
+#if QT_DEPRECATED_SINCE(5, 5)
+# ifndef Q_QDOC
     template <typename T>
+    QT_DEPRECATED_X("Use the non-template version instead")
     static QAndroidJniObject getStaticObjectField(jclass clazz,
-                                           const char *fieldName,
-                                           const char *sig);
-#endif // Q_QDOC
+                                                  const char *fieldName,
+                                                  const char *sig);
+# endif // Q_QDOC
+#endif // QT_DEPRECATED_SINCE
     static QAndroidJniObject getStaticObjectField(jclass clazz,
                                            const char *fieldName,
                                            const char *sig);
@@ -182,17 +188,19 @@ inline bool operator!=(const QAndroidJniObject &obj1, const QAndroidJniObject &o
     return !obj1.isSameObject(obj2);
 }
 
+#if QT_DEPRECATED_SINCE(5, 5)
 template<typename T>
-inline bool operator==(const QAndroidJniObject &obj1, const QAndroidJniObject &obj2)
+QT_DEPRECATED inline bool operator==(const QAndroidJniObject &obj1, const QAndroidJniObject &obj2)
 {
     return obj1.isSameObject(obj2.object());
 }
 
 template <typename T>
-inline bool operator!=(const QAndroidJniObject &obj1, const QAndroidJniObject &obj2)
+QT_DEPRECATED inline bool operator!=(const QAndroidJniObject &obj1, const QAndroidJniObject &obj2)
 {
     return !obj1.isSameObject(obj2.object());
 }
+#endif // QT_DEPRECATED_SINCE
 
 QT_END_NAMESPACE
 
