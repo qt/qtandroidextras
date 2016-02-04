@@ -41,6 +41,7 @@
 #include "qandroidactivityresultreceiver.h"
 #include "qandroidactivityresultreceiver_p.h"
 
+#include <QtCore/private/qjni_p.h>
 #include <QtCore/private/qjnihelpers_p.h>
 
 QT_BEGIN_NAMESPACE
@@ -149,6 +150,52 @@ void QtAndroid::startIntentSender(const QAndroidJniObject &intentSender,
 
     }
 
+}
+
+/*!
+  \since 5.7
+  \fn void QtAndroid::runOnAndroidThread(const Runnable &runnable)
+
+  Posts the given \a runnable on the android thread.
+  The \a runnable will be queued and executed on the Android UI thread, unless it called on the
+  Android UI thread, in which case the runnable will be executed immediately.
+
+  This function is useful to set asynchronously properties of objects that must be set on on Android UI thread.
+*/
+void QtAndroid::runOnAndroidThread(const QtAndroid::Runnable &runnable)
+{
+    QtAndroidPrivate::runOnAndroidThread(runnable, QJNIEnvironmentPrivate());
+}
+
+/*!
+  \since 5.7
+  \fn void QtAndroid::runOnAndroidThreadSync(const Runnable &runnable, int timeoutMs)
+
+  Posts the \a runnable on the Android UI thread and waits until the runnable is executed,
+  or until \a timeoutMs has passed
+
+  This function is useful to create objects, or get properties on Android UI thread:
+
+  \code
+    QAndroidJniObject javaControl;
+    QtAndroid::runOnAndroidThreadSync([&javaControl](){
+
+        // create our Java control on Android UI thread.
+        javaControl = QAndroidJniObject("android/webkit/WebView",
+                                                    "(Landroid/content/Context;)V",
+                                                    QtAndroid::androidActivity().object<jobject>());
+        javaControl.callMethod<void>("setWebViewClient",
+                                       "(Landroid/webkit/WebViewClient;)V",
+                                       QAndroidJniObject("android/webkit/WebViewClient").object());
+    });
+
+    // Continue the execution normally
+    qDebug() << javaControl.isValid();
+  \endcode
+*/
+void QtAndroid::runOnAndroidThreadSync(const QtAndroid::Runnable &runnable, int timeoutMs)
+{
+    QtAndroidPrivate::runOnAndroidThreadSync(runnable, QJNIEnvironmentPrivate(), timeoutMs);
 }
 
 QT_END_NAMESPACE

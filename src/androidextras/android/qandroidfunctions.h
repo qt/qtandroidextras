@@ -47,6 +47,8 @@
 #include <QtAndroidExtras/qandroidextrasglobal.h>
 #include <QtAndroidExtras/qandroidjniobject.h>
 
+#include <functional>
+
 QT_BEGIN_NAMESPACE
 
 class QAndroidActivityResultReceiver;
@@ -62,6 +64,9 @@ namespace QtAndroid
                                               int receiverRequestCode,
                                               QAndroidActivityResultReceiver *resultReceiver = 0);
 
+    typedef std::function<void()> Runnable;
+    Q_ANDROIDEXTRAS_EXPORT void runOnAndroidThread(const Runnable &runnable);
+    Q_ANDROIDEXTRAS_EXPORT void runOnAndroidThreadSync(const Runnable &runnable, int timeoutMs = INT_MAX);
 }
 
 QT_END_NAMESPACE
