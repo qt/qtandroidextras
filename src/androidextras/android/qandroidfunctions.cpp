@@ -211,4 +211,16 @@ void QtAndroid::runOnAndroidThreadSync(const QtAndroid::Runnable &runnable, int 
     QtAndroidPrivate::runOnAndroidThreadSync(runnable, QJNIEnvironmentPrivate(), timeoutMs);
 }
 
+
+/*!
+  \since 5.7
+  \fn void QtAndroid::hideSplashScreen()
+
+  Hides the splash screen.
+*/
+void QtAndroid::hideSplashScreen()
+{
+    QtAndroidPrivate::hideSplashScreen(QJNIEnvironmentPrivate());
+}
+
 QT_END_NAMESPACE

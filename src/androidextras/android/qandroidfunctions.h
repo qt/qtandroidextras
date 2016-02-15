@@ -68,6 +68,8 @@ namespace QtAndroid
     typedef std::function<void()> Runnable;
     Q_ANDROIDEXTRAS_EXPORT void runOnAndroidThread(const Runnable &runnable);
     Q_ANDROIDEXTRAS_EXPORT void runOnAndroidThreadSync(const Runnable &runnable, int timeoutMs = INT_MAX);
+
+    Q_ANDROIDEXTRAS_EXPORT void hideSplashScreen();
 }
 
 QT_END_NAMESPACE
