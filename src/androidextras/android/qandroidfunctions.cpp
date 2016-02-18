@@ -60,11 +60,24 @@ QT_BEGIN_NAMESPACE
 
     Returns a handle to this applications main Activity
 
-    \sa QAndroidJniObject
+    \sa QAndroidJniObject, androidService()
 */
 QAndroidJniObject QtAndroid::androidActivity()
 {
     return QtAndroidPrivate::activity();
+}
+
+/*!
+    \since 5.7
+    \fn QAndroidJniObject QtAndroid::androidService()
+
+    Returns a handle to this applications main Service
+
+    \sa QAndroidJniObject, androidActivity()
+*/
+QAndroidJniObject QtAndroid::androidService()
+{
+    return QtAndroidPrivate::service();
 }
 
 /*!
