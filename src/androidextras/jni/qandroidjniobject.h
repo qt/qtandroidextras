@@ -52,7 +52,7 @@ public:
     explicit QAndroidJniObject(jclass clazz);
     QAndroidJniObject(jclass clazz, const char *sig, ...);
     QAndroidJniObject(jobject obj);
-    ~QAndroidJniObject() { }
+    ~QAndroidJniObject();
 
     template <typename T>
     inline T object() const { return static_cast<T>(javaObject()); }
