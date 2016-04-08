@@ -60,11 +60,24 @@ QT_BEGIN_NAMESPACE
 
     Returns a handle to this applications main Activity
 
-    \sa QAndroidJniObject
+    \sa QAndroidJniObject, androidService()
 */
 QAndroidJniObject QtAndroid::androidActivity()
 {
     return QtAndroidPrivate::activity();
+}
+
+/*!
+    \since 5.7
+    \fn QAndroidJniObject QtAndroid::androidService()
+
+    Returns a handle to this applications main Service
+
+    \sa QAndroidJniObject, androidActivity()
+*/
+QAndroidJniObject QtAndroid::androidService()
+{
+    return QtAndroidPrivate::service();
 }
 
 /*!
@@ -196,6 +209,18 @@ void QtAndroid::runOnAndroidThread(const QtAndroid::Runnable &runnable)
 void QtAndroid::runOnAndroidThreadSync(const QtAndroid::Runnable &runnable, int timeoutMs)
 {
     QtAndroidPrivate::runOnAndroidThreadSync(runnable, QJNIEnvironmentPrivate(), timeoutMs);
+}
+
+
+/*!
+  \since 5.7
+  \fn void QtAndroid::hideSplashScreen()
+
+  Hides the splash screen.
+*/
+void QtAndroid::hideSplashScreen()
+{
+    QtAndroidPrivate::hideSplashScreen(QJNIEnvironmentPrivate());
 }
 
 QT_END_NAMESPACE
