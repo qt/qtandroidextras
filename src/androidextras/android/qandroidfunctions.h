@@ -56,6 +56,7 @@ namespace QtAndroid
 {
     Q_ANDROIDEXTRAS_EXPORT QAndroidJniObject androidActivity();
     Q_ANDROIDEXTRAS_EXPORT QAndroidJniObject androidService();
+    Q_ANDROIDEXTRAS_EXPORT QAndroidJniObject androidContext();
     Q_ANDROIDEXTRAS_EXPORT int androidSdkVersion();
 
     Q_ANDROIDEXTRAS_EXPORT void startIntentSender(const QAndroidJniObject &intentSender,

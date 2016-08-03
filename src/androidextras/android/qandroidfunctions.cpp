@@ -58,9 +58,9 @@ QT_BEGIN_NAMESPACE
     \since 5.3
     \fn QAndroidJniObject QtAndroid::androidActivity()
 
-    Returns a handle to this applications main Activity
+    Returns a handle to this application's main Activity
 
-    \sa QAndroidJniObject, androidService()
+    \sa QAndroidJniObject, androidService(), androidContext()
 */
 QAndroidJniObject QtAndroid::androidActivity()
 {
@@ -71,13 +71,28 @@ QAndroidJniObject QtAndroid::androidActivity()
     \since 5.7
     \fn QAndroidJniObject QtAndroid::androidService()
 
-    Returns a handle to this applications main Service
+    Returns a handle to this application's main Service
 
-    \sa QAndroidJniObject, androidActivity()
+    \sa QAndroidJniObject, androidActivity(), androidContext()
 */
 QAndroidJniObject QtAndroid::androidService()
 {
     return QtAndroidPrivate::service();
+}
+
+/*!
+    \since 5.8
+    \fn QAndroidJniObject QtAndroid::androidContext()
+
+    Returns a handle to this application's main Context. Depending on the nature of
+    the application the Context object is either the main Service or Activity
+    object.
+
+    \sa QAndroidJniObject, androidActivity(), androidService()
+*/
+QAndroidJniObject QtAndroid::androidContext()
+{
+    return QtAndroidPrivate::context();
 }
 
 /*!
