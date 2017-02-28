@@ -70,7 +70,8 @@ namespace QtAndroid
     Q_ANDROIDEXTRAS_EXPORT void runOnAndroidThread(const Runnable &runnable);
     Q_ANDROIDEXTRAS_EXPORT void runOnAndroidThreadSync(const Runnable &runnable, int timeoutMs = INT_MAX);
 
-    Q_ANDROIDEXTRAS_EXPORT void hideSplashScreen();
+    Q_ANDROIDEXTRAS_EXPORT void hideSplashScreen(); // ### Qt6: merge with next overload
+    Q_ANDROIDEXTRAS_EXPORT void hideSplashScreen(int duration);
 }
 
 QT_END_NAMESPACE
