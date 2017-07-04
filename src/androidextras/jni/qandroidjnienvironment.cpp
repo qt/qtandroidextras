@@ -108,4 +108,62 @@ QAndroidJniEnvironment::operator JNIEnv*() const
     return d->jniEnv;
 }
 
+static void clearException(bool silent)
+{
+    QAndroidJniEnvironment env;
+    if (Q_UNLIKELY(env->ExceptionCheck())) {
+        if (!silent)
+            env->ExceptionDescribe();
+        env->ExceptionClear();
+    }
+}
+
+/*!
+    \class QAndroidJniExceptionCleaner
+    \inmodule QtAndroidExtras
+
+    The QAndroidJniExceptionCleaner is a convenience class useful to clean
+    the pending JNI exceptions from the current scope.
+
+    \since 5.10
+*/
+
+/*!
+    \enum QAndroidJniExceptionCleaner::OutputMode
+
+    \value Silent the exceptions are cleaned silently
+    \value Verbose discribes the exceptions before cleaning them
+*/
+
+/*!
+    \fn QAndroidJniExceptionCleaner::QAndroidJniExceptionCleaner(OutputMode outputMode = OutputMode::Silent)
+
+    Cleans any pending exceptions either silently or with descriptions, depending on the \a outputMode.
+ */
+QAndroidJniExceptionCleaner::QAndroidJniExceptionCleaner(QAndroidJniExceptionCleaner::OutputMode outputMode)
+    : m_outputMode(outputMode)
+{
+    clearException(outputMode == OutputMode::Silent);
+}
+
+/*!
+    \fn QAndroidJniExceptionCleaner::~QAndroidJniExceptionCleaner()
+
+    Clean any pending exceptions.
+ */
+QAndroidJniExceptionCleaner::~QAndroidJniExceptionCleaner()
+{
+    clearException(m_outputMode == OutputMode::Silent);
+}
+
+/*!
+ \fn void QAndroidJniExceptionCleaner::clean()
+
+ Manually cleans any pending exceptions
+ */
+void QAndroidJniExceptionCleaner::clean()
+{
+    clearException(m_outputMode == OutputMode::Silent);
+}
+
 QT_END_NAMESPACE

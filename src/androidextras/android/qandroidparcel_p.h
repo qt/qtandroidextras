@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2016 The Qt Company Ltd.
+** Copyright (C) 2017 BogDan Vatra <bogdan@kde.org>
 ** Contact: https://www.qt.io/licensing/
 **
 ** This file is part of the Qt Toolkit.
@@ -37,49 +37,42 @@
 **
 ****************************************************************************/
 
-#ifndef QANDROIDJNIENVIRONMENT_H
-#define QANDROIDJNIENVIRONMENT_H
+#ifndef QANDROIDPARCEL_P_H
+#define QANDROIDPARCEL_P_H
 
-#include <jni.h>
-#include <QtAndroidExtras/qandroidextrasglobal.h>
-#include <QtCore/qglobal.h>
-#include <QtCore/qscopedpointer.h>
+//
+//  W A R N I N G
+//  -------------
+//
+// This file is not part of the Qt API.  It exists purely as an
+// implementation detail.  This header file may change from version to
+// version without notice, or even be removed.
+//
+// We mean it.
+//
 
+#include <QAndroidJniObject>
 QT_BEGIN_NAMESPACE
-
-struct QJNIEnvironmentPrivate;
-
-class Q_ANDROIDEXTRAS_EXPORT QAndroidJniEnvironment
+class QAndroidBinder;
+class QAndroidParcelPrivate
 {
 public:
-    QAndroidJniEnvironment();
-    ~QAndroidJniEnvironment();
-    static JavaVM *javaVM();
-    JNIEnv *operator->();
-    operator JNIEnv*() const;
+    QAndroidParcelPrivate();
+    explicit QAndroidParcelPrivate(const QAndroidJniObject& parcel);
+
+    void writeData(const QByteArray &data) const;
+    void writeBinder(const QAndroidBinder &binder) const;
+    void writeFileDescriptor(int fd) const;
+
+    QByteArray readData() const;
+    int readFileDescriptor() const;
+    QAndroidBinder readBinder() const;
 
 private:
-    Q_DISABLE_COPY(QAndroidJniEnvironment)
-    QScopedPointer<QJNIEnvironmentPrivate> d;
+    friend class QAndroidBinder;
+    friend class QAndroidParcel;
+    QAndroidJniObject handle;
 };
-
-class Q_ANDROIDEXTRAS_EXPORT QAndroidJniExceptionCleaner
-{
-public:
-    enum class OutputMode {
-        Silent,
-        Verbose
-    };
-
-public:
-    explicit QAndroidJniExceptionCleaner(OutputMode outputMode = OutputMode::Silent);
-    ~QAndroidJniExceptionCleaner();
-
-    void clean();
-private:
-    OutputMode m_outputMode;
-};
-
 QT_END_NAMESPACE
 
-#endif // QANDROIDJNIENVIRONMENT_H
+#endif // QANDROIDPARCEL_P_H

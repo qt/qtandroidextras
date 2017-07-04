@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2016 The Qt Company Ltd.
+** Copyright (C) 2017 BogDan Vatra <bogdan@kde.org>
 ** Contact: https://www.qt.io/licensing/
 **
 ** This file is part of the Qt Toolkit.
@@ -37,49 +37,41 @@
 **
 ****************************************************************************/
 
-#ifndef QANDROIDJNIENVIRONMENT_H
-#define QANDROIDJNIENVIRONMENT_H
+#ifndef QANDROIDBINDER_P_H
+#define QANDROIDBINDER_P_H
 
+//
+//  W A R N I N G
+//  -------------
+//
+// This file is not part of the Qt API.  It exists purely as an
+// implementation detail.  This header file may change from version to
+// version without notice, or even be removed.
+//
+// We mean it.
+//
+
+#include "qandroidjniobject.h"
+
+#include <functional>
 #include <jni.h>
-#include <QtAndroidExtras/qandroidextrasglobal.h>
-#include <QtCore/qglobal.h>
-#include <QtCore/qscopedpointer.h>
 
 QT_BEGIN_NAMESPACE
-
-struct QJNIEnvironmentPrivate;
-
-class Q_ANDROIDEXTRAS_EXPORT QAndroidJniEnvironment
+class QAndroidBinder;
+class QAndroidBinderPrivate
 {
 public:
-    QAndroidJniEnvironment();
-    ~QAndroidJniEnvironment();
-    static JavaVM *javaVM();
-    JNIEnv *operator->();
-    operator JNIEnv*() const;
+    explicit QAndroidBinderPrivate(QAndroidBinder *binder);
+    explicit QAndroidBinderPrivate(const QAndroidJniObject &binder);
+    void setDeleteListener(const std::function<void()> &func) { m_deleteListener = func; }
+    ~QAndroidBinderPrivate();
 
 private:
-    Q_DISABLE_COPY(QAndroidJniEnvironment)
-    QScopedPointer<QJNIEnvironmentPrivate> d;
+    QAndroidJniObject handle;
+    std::function<void()> m_deleteListener;
+    bool m_isQtAndroidBinder;
+    friend class QAndroidBinder;
 };
-
-class Q_ANDROIDEXTRAS_EXPORT QAndroidJniExceptionCleaner
-{
-public:
-    enum class OutputMode {
-        Silent,
-        Verbose
-    };
-
-public:
-    explicit QAndroidJniExceptionCleaner(OutputMode outputMode = OutputMode::Silent);
-    ~QAndroidJniExceptionCleaner();
-
-    void clean();
-private:
-    OutputMode m_outputMode;
-};
-
 QT_END_NAMESPACE
 
-#endif // QANDROIDJNIENVIRONMENT_H
+#endif // QANDROIDBINDER_P_H

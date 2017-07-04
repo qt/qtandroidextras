@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2016 The Qt Company Ltd.
+** Copyright (C) 2017 BogDan Vatra <bogdan@kde.org>
 ** Contact: https://www.qt.io/licensing/
 **
 ** This file is part of the Qt Toolkit.
@@ -37,49 +37,34 @@
 **
 ****************************************************************************/
 
-#ifndef QANDROIDJNIENVIRONMENT_H
-#define QANDROIDJNIENVIRONMENT_H
+#ifndef QANDROIDINTENT_H
+#define QANDROIDINTENT_H
 
-#include <jni.h>
 #include <QtAndroidExtras/qandroidextrasglobal.h>
-#include <QtCore/qglobal.h>
-#include <QtCore/qscopedpointer.h>
+#include <QtAndroidExtras/qandroidjniobject.h>
 
 QT_BEGIN_NAMESPACE
-
-struct QJNIEnvironmentPrivate;
-
-class Q_ANDROIDEXTRAS_EXPORT QAndroidJniEnvironment
+class QAndroidJniObject;
+class Q_ANDROIDEXTRAS_EXPORT QAndroidIntent
 {
 public:
-    QAndroidJniEnvironment();
-    ~QAndroidJniEnvironment();
-    static JavaVM *javaVM();
-    JNIEnv *operator->();
-    operator JNIEnv*() const;
+    QAndroidIntent();
+    virtual ~QAndroidIntent();
+    explicit QAndroidIntent(const QAndroidJniObject &intent);
+    explicit QAndroidIntent(const QString &action);
+    explicit QAndroidIntent(const QAndroidJniObject &packageContext, const char *className);
+
+    void putExtra(const QString &key, const QByteArray &data);
+    QByteArray extraBytes(const QString &key);
+
+    void putExtra(const QString &key, const QVariant &value);
+    QVariant extraVariant(const QString &key);
+
+    QAndroidJniObject handle() const;
 
 private:
-    Q_DISABLE_COPY(QAndroidJniEnvironment)
-    QScopedPointer<QJNIEnvironmentPrivate> d;
+    QAndroidJniObject m_handle;
 };
-
-class Q_ANDROIDEXTRAS_EXPORT QAndroidJniExceptionCleaner
-{
-public:
-    enum class OutputMode {
-        Silent,
-        Verbose
-    };
-
-public:
-    explicit QAndroidJniExceptionCleaner(OutputMode outputMode = OutputMode::Silent);
-    ~QAndroidJniExceptionCleaner();
-
-    void clean();
-private:
-    OutputMode m_outputMode;
-};
-
 QT_END_NAMESPACE
 
-#endif // QANDROIDJNIENVIRONMENT_H
+#endif // QANDROIDINTENT_H

@@ -1,9 +1,9 @@
 /****************************************************************************
 **
-** Copyright (C) 2016 The Qt Company Ltd.
+** Copyright (C) 2017 BogDan Vatra <bogdan@kde.org>
 ** Contact: https://www.qt.io/licensing/
 **
-** This file is part of the Qt Toolkit.
+** This file is part of the Android port of the Qt Toolkit.
 **
 ** $QT_BEGIN_LICENSE:LGPL$
 ** Commercial License Usage
@@ -37,49 +37,19 @@
 **
 ****************************************************************************/
 
-#ifndef QANDROIDJNIENVIRONMENT_H
-#define QANDROIDJNIENVIRONMENT_H
+package org.qtproject.qt5.android.extras;
 
-#include <jni.h>
-#include <QtAndroidExtras/qandroidextrasglobal.h>
-#include <QtCore/qglobal.h>
-#include <QtCore/qscopedpointer.h>
+import android.content.ComponentName;
+import android.content.ServiceConnection;
+import android.os.IBinder;
+import android.os.Parcel;
 
-QT_BEGIN_NAMESPACE
+public class QtNative {
+    // Binder
+    public static native boolean onTransact(long id, int code, Parcel data, Parcel reply, int flags);
 
-struct QJNIEnvironmentPrivate;
 
-class Q_ANDROIDEXTRAS_EXPORT QAndroidJniEnvironment
-{
-public:
-    QAndroidJniEnvironment();
-    ~QAndroidJniEnvironment();
-    static JavaVM *javaVM();
-    JNIEnv *operator->();
-    operator JNIEnv*() const;
-
-private:
-    Q_DISABLE_COPY(QAndroidJniEnvironment)
-    QScopedPointer<QJNIEnvironmentPrivate> d;
-};
-
-class Q_ANDROIDEXTRAS_EXPORT QAndroidJniExceptionCleaner
-{
-public:
-    enum class OutputMode {
-        Silent,
-        Verbose
-    };
-
-public:
-    explicit QAndroidJniExceptionCleaner(OutputMode outputMode = OutputMode::Silent);
-    ~QAndroidJniExceptionCleaner();
-
-    void clean();
-private:
-    OutputMode m_outputMode;
-};
-
-QT_END_NAMESPACE
-
-#endif // QANDROIDJNIENVIRONMENT_H
+    // ServiceConnection
+    public static native void onServiceConnected(long id, String name, IBinder service);
+    public static native void onServiceDisconnected(long id, String name);
+}

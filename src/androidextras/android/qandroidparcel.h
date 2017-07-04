@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2016 The Qt Company Ltd.
+** Copyright (C) 2017 BogDan Vatra <bogdan@kde.org>
 ** Contact: https://www.qt.io/licensing/
 **
 ** This file is part of the Qt Toolkit.
@@ -37,49 +37,42 @@
 **
 ****************************************************************************/
 
-#ifndef QANDROIDJNIENVIRONMENT_H
-#define QANDROIDJNIENVIRONMENT_H
+#ifndef QANDROIDPARCEL_H
+#define QANDROIDPARCEL_H
 
-#include <jni.h>
 #include <QtAndroidExtras/qandroidextrasglobal.h>
-#include <QtCore/qglobal.h>
-#include <QtCore/qscopedpointer.h>
+#include <QSharedPointer>
+#include <QVariant>
 
 QT_BEGIN_NAMESPACE
-
-struct QJNIEnvironmentPrivate;
-
-class Q_ANDROIDEXTRAS_EXPORT QAndroidJniEnvironment
+class QAndroidBinder;
+class QAndroidJniObject;
+class QAndroidParcelPrivate;
+class Q_ANDROIDEXTRAS_EXPORT QAndroidParcel
 {
 public:
-    QAndroidJniEnvironment();
-    ~QAndroidJniEnvironment();
-    static JavaVM *javaVM();
-    JNIEnv *operator->();
-    operator JNIEnv*() const;
+    QAndroidParcel();
+    explicit QAndroidParcel(const QAndroidJniObject& parcel);
+    virtual ~QAndroidParcel();
+
+    void writeData(const QByteArray &data) const;
+    void writeVariant(const QVariant &value) const;
+    void writeBinder(const QAndroidBinder &binder) const;
+    void writeFileDescriptor(int fd) const;
+
+    QByteArray readData() const;
+    QVariant readVariant() const;
+    QAndroidBinder readBinder() const;
+    int readFileDescriptor() const;
+
+    QAndroidJniObject handle() const;
 
 private:
-    Q_DISABLE_COPY(QAndroidJniEnvironment)
-    QScopedPointer<QJNIEnvironmentPrivate> d;
-};
-
-class Q_ANDROIDEXTRAS_EXPORT QAndroidJniExceptionCleaner
-{
-public:
-    enum class OutputMode {
-        Silent,
-        Verbose
-    };
-
-public:
-    explicit QAndroidJniExceptionCleaner(OutputMode outputMode = OutputMode::Silent);
-    ~QAndroidJniExceptionCleaner();
-
-    void clean();
-private:
-    OutputMode m_outputMode;
+    friend class QAndroidParcelPrivate;
+    friend class QAndroidBinder;
+    QSharedPointer<QAndroidParcelPrivate> d;
 };
 
 QT_END_NAMESPACE
 
-#endif // QANDROIDJNIENVIRONMENT_H
+#endif // QANDROIDPARCEL_H

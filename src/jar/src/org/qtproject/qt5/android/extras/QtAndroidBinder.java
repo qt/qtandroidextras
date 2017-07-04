@@ -1,9 +1,9 @@
 /****************************************************************************
 **
-** Copyright (C) 2016 The Qt Company Ltd.
+** Copyright (C) 2017 BogDan Vatra <bogdan@kde.org>
 ** Contact: https://www.qt.io/licensing/
 **
-** This file is part of the Qt Toolkit.
+** This file is part of the Android port of the Qt Toolkit.
 **
 ** $QT_BEGIN_LICENSE:LGPL$
 ** Commercial License Usage
@@ -37,49 +37,33 @@
 **
 ****************************************************************************/
 
-#ifndef QANDROIDJNIENVIRONMENT_H
-#define QANDROIDJNIENVIRONMENT_H
+package org.qtproject.qt5.android.extras;
 
-#include <jni.h>
-#include <QtAndroidExtras/qandroidextrasglobal.h>
-#include <QtCore/qglobal.h>
-#include <QtCore/qscopedpointer.h>
+import android.os.Binder;
+import android.os.Parcel;
 
-QT_BEGIN_NAMESPACE
-
-struct QJNIEnvironmentPrivate;
-
-class Q_ANDROIDEXTRAS_EXPORT QAndroidJniEnvironment
+public class QtAndroidBinder extends Binder
 {
-public:
-    QAndroidJniEnvironment();
-    ~QAndroidJniEnvironment();
-    static JavaVM *javaVM();
-    JNIEnv *operator->();
-    operator JNIEnv*() const;
+    public QtAndroidBinder(long id)
+    {
+        m_id = id;
+    }
 
-private:
-    Q_DISABLE_COPY(QAndroidJniEnvironment)
-    QScopedPointer<QJNIEnvironmentPrivate> d;
-};
+    public void setId(long id)
+    {
+        synchronized(this)
+        {
+            m_id = id;
+        }
+    }
+    @Override
+    protected boolean onTransact(int code, Parcel data, Parcel reply, int flags)
+    {
+        synchronized(this)
+        {
+            return QtNative.onTransact(m_id, code, data, reply, flags);
+        }
+    }
 
-class Q_ANDROIDEXTRAS_EXPORT QAndroidJniExceptionCleaner
-{
-public:
-    enum class OutputMode {
-        Silent,
-        Verbose
-    };
-
-public:
-    explicit QAndroidJniExceptionCleaner(OutputMode outputMode = OutputMode::Silent);
-    ~QAndroidJniExceptionCleaner();
-
-    void clean();
-private:
-    OutputMode m_outputMode;
-};
-
-QT_END_NAMESPACE
-
-#endif // QANDROIDJNIENVIRONMENT_H
+    private long m_id;
+}

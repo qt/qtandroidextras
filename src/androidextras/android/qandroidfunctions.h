@@ -52,6 +52,9 @@
 QT_BEGIN_NAMESPACE
 
 class QAndroidActivityResultReceiver;
+class QAndroidServiceConnection;
+class QAndroidIntent;
+
 namespace QtAndroid
 {
     Q_ANDROIDEXTRAS_EXPORT QAndroidJniObject androidActivity();
@@ -65,6 +68,25 @@ namespace QtAndroid
     Q_ANDROIDEXTRAS_EXPORT void startActivity(const QAndroidJniObject &intent,
                                               int receiverRequestCode,
                                               QAndroidActivityResultReceiver *resultReceiver = nullptr);
+
+    enum class BindFlag {
+        None                = 0x00000000,
+        AutoCreate          = 0x00000001,
+        DebugUnbind         = 0x00000002,
+        NotForeground       = 0x00000004,
+        AboveClient         = 0x00000008,
+        AllowOomManagement  = 0x00000010,
+        WaivePriority       = 0x00000020,
+        Important           = 0x00000040,
+        AdjustWithActivity  = 0x00000080,
+        ExternalService     = -2147483648 // 0x80000000
+
+    };
+    Q_DECLARE_FLAGS(BindFlags, BindFlag)
+
+    Q_ANDROIDEXTRAS_EXPORT bool bindService(const QAndroidIntent &serviceIntent,
+                                            const QAndroidServiceConnection &serviceConnection,
+                                            BindFlags flags = BindFlag::None);
 
     typedef std::function<void()> Runnable;
     Q_ANDROIDEXTRAS_EXPORT void runOnAndroidThread(const Runnable &runnable);

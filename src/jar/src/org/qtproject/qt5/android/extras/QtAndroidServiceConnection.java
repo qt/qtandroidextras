@@ -1,9 +1,9 @@
 /****************************************************************************
 **
-** Copyright (C) 2016 The Qt Company Ltd.
+** Copyright (C) 2017 BogDan Vatra <bogdan@kde.org>
 ** Contact: https://www.qt.io/licensing/
 **
-** This file is part of the Qt Toolkit.
+** This file is part of the Android port of the Qt Toolkit.
 **
 ** $QT_BEGIN_LICENSE:LGPL$
 ** Commercial License Usage
@@ -37,49 +37,42 @@
 **
 ****************************************************************************/
 
-#ifndef QANDROIDJNIENVIRONMENT_H
-#define QANDROIDJNIENVIRONMENT_H
+package org.qtproject.qt5.android.extras;
 
-#include <jni.h>
-#include <QtAndroidExtras/qandroidextrasglobal.h>
-#include <QtCore/qglobal.h>
-#include <QtCore/qscopedpointer.h>
+import android.content.ComponentName;
+import android.content.ServiceConnection;
+import android.os.IBinder;
 
-QT_BEGIN_NAMESPACE
-
-struct QJNIEnvironmentPrivate;
-
-class Q_ANDROIDEXTRAS_EXPORT QAndroidJniEnvironment
+public class QtAndroidServiceConnection implements ServiceConnection
 {
-public:
-    QAndroidJniEnvironment();
-    ~QAndroidJniEnvironment();
-    static JavaVM *javaVM();
-    JNIEnv *operator->();
-    operator JNIEnv*() const;
+    public QtAndroidServiceConnection(long id)
+    {
+        m_id = id;
+    }
 
-private:
-    Q_DISABLE_COPY(QAndroidJniEnvironment)
-    QScopedPointer<QJNIEnvironmentPrivate> d;
-};
+    public void setId(long id)
+    {
+        synchronized(this)
+        {
+            m_id = id;
+        }
+    }
 
-class Q_ANDROIDEXTRAS_EXPORT QAndroidJniExceptionCleaner
-{
-public:
-    enum class OutputMode {
-        Silent,
-        Verbose
-    };
+    @Override
+    public void onServiceConnected(ComponentName name, IBinder service)
+    {
+        synchronized(this) {
+            QtNative.onServiceConnected(m_id, name.flattenToString(), service);
+        }
+    }
 
-public:
-    explicit QAndroidJniExceptionCleaner(OutputMode outputMode = OutputMode::Silent);
-    ~QAndroidJniExceptionCleaner();
+    @Override
+    public void onServiceDisconnected(ComponentName name)
+    {
+        synchronized(this) {
+            QtNative.onServiceDisconnected(m_id, name.flattenToString());
+        }
+    }
 
-    void clean();
-private:
-    OutputMode m_outputMode;
-};
-
-QT_END_NAMESPACE
-
-#endif // QANDROIDJNIENVIRONMENT_H
+    private long m_id;
+}

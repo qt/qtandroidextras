@@ -1,5 +1,6 @@
 /****************************************************************************
 **
+** Copyright (C) 2017 BogDan Vatra <bogdan@kde.org>
 ** Copyright (C) 2016 The Qt Company Ltd.
 ** Contact: https://www.qt.io/licensing/
 **
@@ -40,9 +41,13 @@
 #include "qandroidfunctions.h"
 #include "qandroidactivityresultreceiver.h"
 #include "qandroidactivityresultreceiver_p.h"
+#include "qandroidintent.h"
+#include "qandroidserviceconnection.h"
 
 #include <QtCore/private/qjni_p.h>
 #include <QtCore/private/qjnihelpers_p.h>
+
+#include <jni/qandroidjnienvironment.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -52,6 +57,43 @@ QT_BEGIN_NAMESPACE
     \since 5.3
     \brief The QtAndroid namespace provides miscellaneous functions to aid Android development.
     \inheaderfile QtAndroid
+*/
+
+/*!
+    \since 5.10
+    \enum QtAndroid::BindFlag
+
+    This enum is used with QtAndroid::bindService to describe the mode in which the
+    binding is performed.
+
+    \value None                 No options.
+    \value AutoCreate           Automatically creates the service as long as the binding exist.
+                                See \l {https://developer.android.com/reference/android/content/Context.html#BIND_AUTO_CREATE}
+                                {BIND_AUTO_CREATE} documentation for more details.
+    \value DebugUnbind          Include debugging help for mismatched calls to unbind.
+                                See \l {https://developer.android.com/reference/android/content/Context.html#BIND_DEBUG_UNBIND}
+                                {BIND_DEBUG_UNBIND} documentation for more details.
+    \value NotForeground        Don't allow this binding to raise the target service's process to the foreground scheduling priority.
+                                See \l {https://developer.android.com/reference/android/content/Context.html#BIND_NOT_FOREGROUND}
+                                {BIND_NOT_FOREGROUND} documentation for more details.
+    \value AboveClient          Indicates that the client application binding to this service considers the service to be more important than the app itself.
+                                See \l {https://developer.android.com/reference/android/content/Context.html#BIND_ABOVE_CLIENT}
+                                {BIND_ABOVE_CLIENT} documentation for more details.
+    \value AllowOomManagement   Allow the process hosting the bound service to go through its normal memory management.
+                                See \l {https://developer.android.com/reference/android/content/Context.html#BIND_ALLOW_OOM_MANAGEMENT}
+                                {BIND_ALLOW_OOM_MANAGEMENT} documentation for more details.
+    \value WaivePriority        Don't impact the scheduling or memory management priority of the target service's hosting process.
+                                See \l {https://developer.android.com/reference/android/content/Context.html#BIND_WAIVE_PRIORITY}
+                                {BIND_WAIVE_PRIORITY} documentation for more details.
+    \value Important            This service is assigned a higher priority so that it is available to the client when needed.
+                                See \l {https://developer.android.com/reference/android/content/Context.html#BIND_IMPORTANT}
+                                {BIND_IMPORTANT} documentation for more details.
+    \value AdjustWithActivity   If binding from an activity, allow the target service's process importance to be raised based on whether the activity is visible to the user.
+                                See \l {https://developer.android.com/reference/android/content/Context.html#BIND_ADJUST_WITH_ACTIVITY}
+                                {BIND_ADJUST_WITH_ACTIVITY} documentation for more details.
+    \value ExternalService      The service being bound is an isolated, external service.
+                                See \l {https://developer.android.com/reference/android/content/Context.html#BIND_EXTERNAL_SERVICE}
+                                {BIND_EXTERNAL_SERVICE} documentation for more details.
 */
 
 /*!
@@ -253,6 +295,30 @@ void QtAndroid::hideSplashScreen()
 void QtAndroid::hideSplashScreen(int duration)
 {
     QtAndroidPrivate::hideSplashScreen(QJNIEnvironmentPrivate(), duration);
+}
+
+
+/*!
+    \since 5.10
+    \fn bool QtAndroid::bindService(const QAndroidIntent &serviceIntent, const QAndroidServiceConnection &serviceConnection, BindFlags flags = BindFlag::None)
+
+    Binds the service given by \a serviceIntent, \a serviceConnection and \a flags.
+    The \a serviceIntent object identifies the service to connect to.
+    The \a serviceConnection is a listener that receives the information as the service is started and stopped.
+
+    \return true on success
+
+    See \l {https://developer.android.com/reference/android/content/Context.html#bindService%28android.content.Intent,%20android.content.ServiceConnection,%20int%29}
+    {Android documentation} documentation for more details.
+
+    \sa QAndroidIntent, QAndroidServiceConnection, BindFlag
+*/
+bool QtAndroid::bindService(const QAndroidIntent &serviceIntent,
+                            const QAndroidServiceConnection &serviceConnection, BindFlags flags)
+{
+    QAndroidJniExceptionCleaner cleaner;
+    return androidContext().callMethod<jboolean>("bindService", "(Landroid/content/Intent;Landroid/content/ServiceConnection;I)Z",
+                                                 serviceIntent.handle().object(), serviceConnection.handle().object(), jint(flags));
 }
 
 QT_END_NAMESPACE

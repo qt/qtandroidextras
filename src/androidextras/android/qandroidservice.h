@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2016 The Qt Company Ltd.
+** Copyright (C) 2017 BogDan Vatra <bogdan@kde.org>
 ** Contact: https://www.qt.io/licensing/
 **
 ** This file is part of the Qt Toolkit.
@@ -37,49 +37,36 @@
 **
 ****************************************************************************/
 
-#ifndef QANDROIDJNIENVIRONMENT_H
-#define QANDROIDJNIENVIRONMENT_H
+#ifndef QANDROIDSERVICE_H
+#define QANDROIDSERVICE_H
 
-#include <jni.h>
 #include <QtAndroidExtras/qandroidextrasglobal.h>
-#include <QtCore/qglobal.h>
-#include <QtCore/qscopedpointer.h>
+#include <QCoreApplication>
+#include <QSharedPointer>
 
 QT_BEGIN_NAMESPACE
-
-struct QJNIEnvironmentPrivate;
-
-class Q_ANDROIDEXTRAS_EXPORT QAndroidJniEnvironment
+class QAndroidServicePrivate;
+class QAndroidIntent;
+class QAndroidBinder;
+class Q_ANDROIDEXTRAS_EXPORT QAndroidService : public QCoreApplication
 {
 public:
-    QAndroidJniEnvironment();
-    ~QAndroidJniEnvironment();
-    static JavaVM *javaVM();
-    JNIEnv *operator->();
-    operator JNIEnv*() const;
+    QAndroidService(int &argc, char **argv
+#ifndef Q_QDOC
+                                     , int flags = ApplicationFlags
+#endif
+            );
+    virtual ~QAndroidService();
+
+    virtual QAndroidBinder* onBind(const QAndroidIntent &intent);
 
 private:
-    Q_DISABLE_COPY(QAndroidJniEnvironment)
-    QScopedPointer<QJNIEnvironmentPrivate> d;
-};
+    friend class QAndroidServicePrivate;
+    Q_DISABLE_COPY(QAndroidService)
 
-class Q_ANDROIDEXTRAS_EXPORT QAndroidJniExceptionCleaner
-{
-public:
-    enum class OutputMode {
-        Silent,
-        Verbose
-    };
-
-public:
-    explicit QAndroidJniExceptionCleaner(OutputMode outputMode = OutputMode::Silent);
-    ~QAndroidJniExceptionCleaner();
-
-    void clean();
-private:
-    OutputMode m_outputMode;
+    QScopedPointer<QAndroidServicePrivate> d;
 };
 
 QT_END_NAMESPACE
 
-#endif // QANDROIDJNIENVIRONMENT_H
+#endif // QANDROIDSERVICE_H
