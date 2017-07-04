@@ -181,6 +181,12 @@ void QtAndroid::startIntentSender(const QAndroidJniObject &intentSender,
 }
 
 /*!
+    \typedef QtAndroid::Runnable
+
+    Synonym for std::function<void()>.
+*/
+
+/*!
   \since 5.7
   \fn void QtAndroid::runOnAndroidThread(const Runnable &runnable)
 
