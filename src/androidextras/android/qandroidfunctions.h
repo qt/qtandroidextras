@@ -94,6 +94,17 @@ namespace QtAndroid
 
     Q_ANDROIDEXTRAS_EXPORT void hideSplashScreen(); // ### Qt6: merge with next overload
     Q_ANDROIDEXTRAS_EXPORT void hideSplashScreen(int duration);
+
+    enum class PermissionResult {
+        Granted,
+        Denied
+    };
+    typedef QHash<QString, PermissionResult> PermissionResultMap;
+    typedef std::function<void(const PermissionResultMap &)> PermissionResultCallback;
+    Q_ANDROIDEXTRAS_EXPORT void requestPermissions(const QStringList &permissions, const PermissionResultCallback &callbackFunc);
+    Q_ANDROIDEXTRAS_EXPORT PermissionResultMap requestPermissionsSync(const QStringList &permissions, int timeoutMs = INT_MAX);
+    Q_ANDROIDEXTRAS_EXPORT PermissionResult checkPermission(const QString &permission);
+    Q_ANDROIDEXTRAS_EXPORT bool shouldShowRequestPermissionRationale(const QString &permission);
 }
 
 QT_END_NAMESPACE
