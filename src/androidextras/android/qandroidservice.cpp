@@ -53,8 +53,9 @@ QT_BEGIN_NAMESPACE
 class QAndroidServicePrivate : public QObject, public QtAndroidPrivate::OnBindListener
 {
 public:
-    QAndroidServicePrivate(QAndroidService *service)
+    QAndroidServicePrivate(QAndroidService *service, const std::function<QAndroidBinder *(const QAndroidIntent &)> &binder = {})
         : m_service(service)
+        , m_binder(binder)
     {
         QtAndroidPrivate::setOnBindListener(this);
     }
@@ -73,7 +74,8 @@ public:
     // OnBindListener interface
     jobject onBind(jobject intent) override
     {
-        auto binder = m_service->onBind(QAndroidIntent(intent));
+        auto qai = QAndroidIntent(intent);
+        auto binder = m_binder ? m_binder(qai) : m_service->onBind(qai);
         if (binder) {
             {
                 QMutexLocker lock(&m_bindersMutex);
@@ -92,8 +94,9 @@ private:
         m_binders.remove(obj);
     }
 
-private:
-    QAndroidService *m_service;
+public:
+    QAndroidService *m_service = nullptr;
+    std::function<QAndroidBinder *(const QAndroidIntent &)> m_binder;
     QMutex m_bindersMutex;
     QSet<QAndroidBinder*> m_binders;
 };
@@ -116,7 +119,19 @@ private:
  */
 QAndroidService::QAndroidService(int &argc, char **argv, int flags)
     : QCoreApplication (argc, argv, QtAndroidPrivate::acuqireServiceSetup(flags))
-    , d(new QAndroidServicePrivate(this))
+    , d(new QAndroidServicePrivate{this})
+{
+}
+
+/*!
+    Creates a new Android Service
+
+    \a binder is used to create a binder each when is needed
+    \sa QCoreApplication
+ */
+QAndroidService::QAndroidService(int &argc, char **argv, const std::function<QAndroidBinder *(const QAndroidIntent &)> &binder, int flags)
+    : QCoreApplication (argc, argv, QtAndroidPrivate::acuqireServiceSetup(flags))
+    , d(new QAndroidServicePrivate{this, binder})
 {
 }
 
