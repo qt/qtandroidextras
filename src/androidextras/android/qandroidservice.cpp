@@ -46,6 +46,7 @@
 #include <private/qjnihelpers_p.h>
 
 #include <QMutex>
+#include <QTimer>
 #include <QSet>
 
 QT_BEGIN_NAMESPACE
@@ -56,7 +57,7 @@ public:
     QAndroidServicePrivate(QAndroidService *service)
         : m_service(service)
     {
-        QtAndroidPrivate::setOnBindListener(this);
+        QTimer::singleShot(0,this, [this]{ QtAndroidPrivate::setOnBindListener(this);});
     }
 
     ~QAndroidServicePrivate()
