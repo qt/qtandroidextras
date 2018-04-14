@@ -114,7 +114,11 @@ public:
 
 
 /*!
-    Creates a new Android Service
+    \fn QAndroidService::QAndroidService(int &argc, char **argv)
+
+    Creates a new Android service, passing \a argc and \a argv as parameters.
+
+    //! Parameter \a flags is omitted in the documentation.
 
     \sa QCoreApplication
  */
@@ -125,9 +129,14 @@ QAndroidService::QAndroidService(int &argc, char **argv, int flags)
 }
 
 /*!
-    Creates a new Android Service
+    \fn QAndroidService::QAndroidService(int &argc, char **argv, const std::function<QAndroidBinder *(const QAndroidIntent &)> &binder)
 
-    \a binder is used to create a binder each when is needed
+    Creates a new Android service, passing \a argc and \a argv as parameters.
+
+    \a binder is used to create a \l {QAndroidBinder}{binder} when needed.
+
+    //! Parameter \a flags is omitted in the documentation.
+
     \sa QCoreApplication
  */
 QAndroidService::QAndroidService(int &argc, char **argv, const std::function<QAndroidBinder *(const QAndroidIntent &)> &binder, int flags)
