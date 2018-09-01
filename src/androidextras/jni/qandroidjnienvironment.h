@@ -57,6 +57,7 @@ public:
     static JavaVM *javaVM();
     JNIEnv *operator->();
     operator JNIEnv*() const;
+    jclass findClass(const char *className);
 
 private:
     Q_DISABLE_COPY(QAndroidJniEnvironment)
