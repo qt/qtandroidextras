@@ -125,6 +125,8 @@ QByteArray QAndroidIntent::extraBytes(const QString &key)
     QAndroidJniExceptionCleaner cleaner;
     auto array = m_handle.callObjectMethod("getByteArrayExtra", "(Ljava/lang/String;)[B",
                                            QAndroidJniObject::fromString(key).object());
+    if (!array.isValid() || !array.object())
+        return QByteArray();
     QAndroidJniEnvironment env;
     auto sz = env->GetArrayLength(jarray(array.object()));
     QByteArray res(sz, Qt::Initialization::Uninitialized);
