@@ -9,8 +9,7 @@ includepaths += -I . \
                 -I .. \
                 -I ../android \
                 -I ../jni \
-                -I ./QtAndroidExtras \
-                -I $QT_INSTALL_HEADERS
+                -I ./QtAndroidExtras
 
 project = QtAndroidExtras
 description = Qt Android Extras Reference Documentation
