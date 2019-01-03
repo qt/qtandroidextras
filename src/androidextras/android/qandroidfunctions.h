@@ -68,6 +68,9 @@ namespace QtAndroid
     Q_ANDROIDEXTRAS_EXPORT void startActivity(const QAndroidJniObject &intent,
                                               int receiverRequestCode,
                                               QAndroidActivityResultReceiver *resultReceiver = nullptr);
+    Q_ANDROIDEXTRAS_EXPORT void startActivity(const QAndroidIntent &intent,
+                                              int receiverRequestCode,
+                                              QAndroidActivityResultReceiver *resultReceiver = nullptr);
 
     enum class BindFlag {
         None                = 0x00000000,

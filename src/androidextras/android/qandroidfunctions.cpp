@@ -181,6 +181,27 @@ void QtAndroid::startActivity(const QAndroidJniObject &intent,
 }
 
 /*!
+  \since 5.13
+
+  Starts the activity given by \a intent and provides the result asynchronously through the
+  \a resultReceiver if this is non-null.
+
+  If \a resultReceiver is null, then the \c startActivity() method in the \c androidActivity()
+  will be called. Otherwise \c startActivityForResult() will be called.
+
+  The \a receiverRequestCode is a request code unique to the \a resultReceiver, and will be
+  returned along with the result, making it possible to use the same receiver for more than
+  one intent.
+
+ */
+void QtAndroid::startActivity(const QAndroidIntent &intent,
+                              int receiverRequestCode,
+                              QAndroidActivityResultReceiver *resultReceiver)
+{
+    startActivity(intent.handle(), receiverRequestCode, resultReceiver);
+}
+
+/*!
   \since 5.3
 
   Starts the activity given by \a intentSender and provides the result asynchronously through the
