@@ -47,7 +47,7 @@
 
 QT_BEGIN_NAMESPACE
 
-struct QJNIEnvironmentPrivate;
+class QJNIEnvironmentPrivate;
 
 class Q_ANDROIDEXTRAS_EXPORT QAndroidJniEnvironment
 {
