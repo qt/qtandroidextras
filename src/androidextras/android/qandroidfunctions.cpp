@@ -43,6 +43,7 @@
 #include "qandroidactivityresultreceiver_p.h"
 #include "qandroidintent.h"
 #include "qandroidserviceconnection.h"
+#include "qandroidactivitycallbackresultreceiver_p.h"
 
 #include <QtCore/private/qjni_p.h>
 #include <QtCore/private/qjnihelpers_p.h>
@@ -199,6 +200,24 @@ void QtAndroid::startActivity(const QAndroidIntent &intent,
                               QAndroidActivityResultReceiver *resultReceiver)
 {
     startActivity(intent.handle(), receiverRequestCode, resultReceiver);
+}
+
+/*!
+  \since 5.13
+
+  Starts the activity given by \a intent using \c startActivityForResult() and provides the result by calling callbackFunc.
+
+  The \a receiverRequestCode is a request code unique to the \a resultReceiver, and will be
+  returned along with the result, making it possible to use the same receiver for more than
+  one intent.
+*/
+void QtAndroid::startActivity(const QAndroidJniObject &intent,
+                              int receiverRequestCode,
+                              std::function<void(int, int, const QAndroidJniObject &data)> callbackFunc)
+{
+    QAndroidJniObject activity = androidActivity();
+    QAndroidActivityCallbackResultReceiver::instance()->registerCallback(receiverRequestCode, callbackFunc);
+    startActivity(intent, receiverRequestCode, QAndroidActivityCallbackResultReceiver::instance());
 }
 
 /*!
