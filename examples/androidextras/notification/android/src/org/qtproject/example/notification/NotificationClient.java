@@ -79,8 +79,8 @@ public class NotificationClient
                 m_builder = new Notification.Builder(context);
             }
 
-            m_builder.setSmallIcon(R.drawable.ic_launcher)
-                    .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_launcher))
+            m_builder.setSmallIcon(R.drawable.icon)
+                    .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.icon))
                     .setContentTitle("A message from Qt!")
                     .setContentText(message)
                     .setDefaults(Notification.DEFAULT_SOUND)
