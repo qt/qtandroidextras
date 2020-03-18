@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2016 The Qt Company Ltd.
+** Copyright (C) 2020 The Qt Company Ltd.
 ** Contact: https://www.qt.io/licensing/
 **
 ** This file is part of the QtAndroidExtras module of the Qt Toolkit.
@@ -48,37 +48,27 @@
 **
 ****************************************************************************/
 
-#include "notificationclient.h"
+#ifndef MYCLASS_H
+#define MYCLASS_H
 
-#include <QtAndroid>
+#include <QObject>
 
-NotificationClient::NotificationClient(QObject *parent)
-    : QObject(parent)
+class JniMessenger : public QObject
 {
-    connect(this, SIGNAL(notificationChanged()), this, SLOT(updateAndroidNotification()));
-}
+    Q_OBJECT
 
-void NotificationClient::setNotification(const QString &notification)
-{
-    if (m_notification == notification)
-        return;
+public:
+    explicit JniMessenger(QObject *parent = nullptr);
+    static JniMessenger *instance() { return m_instance; }
+    Q_INVOKABLE void printFromJava(const QString &message);
 
-    m_notification = notification;
-    emit notificationChanged();
-}
+signals:
+    void messageFromJava(const QString &message);
 
-QString NotificationClient::notification() const
-{
-    return m_notification;
-}
+public slots:
 
-void NotificationClient::updateAndroidNotification()
-{
-    QAndroidJniObject javaNotification = QAndroidJniObject::fromString(m_notification);
-    QAndroidJniObject::callStaticMethod<void>(
-        "org/qtproject/example/notification/NotificationClient",
-        "notify",
-        "(Landroid/content/Context;Ljava/lang/String;)V",
-        QtAndroid::androidContext().object(),
-        javaNotification.object<jstring>());
-}
+private:
+    static JniMessenger *m_instance;
+};
+
+#endif // MYCLASS_H

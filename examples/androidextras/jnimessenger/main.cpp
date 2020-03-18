@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2016 The Qt Company Ltd.
+** Copyright (C) 2020 The Qt Company Ltd.
 ** Contact: https://www.qt.io/licensing/
 **
 ** This file is part of the QtAndroidExtras module of the Qt Toolkit.
@@ -48,37 +48,29 @@
 **
 ****************************************************************************/
 
-#include "notificationclient.h"
+#include "jnimessenger.h"
 
-#include <QtAndroid>
+#include <QGuiApplication>
+#include <QQmlApplicationEngine>
+#include <QQmlContext>
 
-NotificationClient::NotificationClient(QObject *parent)
-    : QObject(parent)
+int main(int argc, char *argv[])
 {
-    connect(this, SIGNAL(notificationChanged()), this, SLOT(updateAndroidNotification()));
-}
+    QGuiApplication app(argc, argv);
 
-void NotificationClient::setNotification(const QString &notification)
-{
-    if (m_notification == notification)
-        return;
+    QQmlApplicationEngine engine;
+    const QUrl url(QStringLiteral("qrc:/main.qml"));
 
-    m_notification = notification;
-    emit notificationChanged();
-}
+    JniMessenger *jniMessenger = new JniMessenger(&app);
 
-QString NotificationClient::notification() const
-{
-    return m_notification;
-}
+    engine.rootContext()->setContextProperty(QLatin1String("JniMessenger"), jniMessenger);
 
-void NotificationClient::updateAndroidNotification()
-{
-    QAndroidJniObject javaNotification = QAndroidJniObject::fromString(m_notification);
-    QAndroidJniObject::callStaticMethod<void>(
-        "org/qtproject/example/notification/NotificationClient",
-        "notify",
-        "(Landroid/content/Context;Ljava/lang/String;)V",
-        QtAndroid::androidContext().object(),
-        javaNotification.object<jstring>());
+    QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
+                     &app, [url](QObject *obj, const QUrl &objUrl) {
+        if (!obj && url == objUrl)
+            QCoreApplication::exit(-1);
+    }, Qt::QueuedConnection);
+    engine.load(url);
+
+    return app.exec();
 }

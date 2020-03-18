@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2016 The Qt Company Ltd.
+** Copyright (C) 2020 The Qt Company Ltd.
 ** Contact: https://www.qt.io/licensing/
 **
 ** This file is part of the QtAndroidExtras module of the Qt Toolkit.
@@ -48,37 +48,17 @@
 **
 ****************************************************************************/
 
-#include "notificationclient.h"
+package org.qtproject.example.jnimessenger;
 
-#include <QtAndroid>
-
-NotificationClient::NotificationClient(QObject *parent)
-    : QObject(parent)
+public class JniMessenger
 {
-    connect(this, SIGNAL(notificationChanged()), this, SLOT(updateAndroidNotification()));
-}
+    private static native void callFromJava(String message);
 
-void NotificationClient::setNotification(const QString &notification)
-{
-    if (m_notification == notification)
-        return;
+    public JniMessenger() {}
 
-    m_notification = notification;
-    emit notificationChanged();
-}
-
-QString NotificationClient::notification() const
-{
-    return m_notification;
-}
-
-void NotificationClient::updateAndroidNotification()
-{
-    QAndroidJniObject javaNotification = QAndroidJniObject::fromString(m_notification);
-    QAndroidJniObject::callStaticMethod<void>(
-        "org/qtproject/example/notification/NotificationClient",
-        "notify",
-        "(Landroid/content/Context;Ljava/lang/String;)V",
-        QtAndroid::androidContext().object(),
-        javaNotification.object<jstring>());
+    public static void printFromJava(String message)
+    {
+        System.out.println("This is printed from JAVA, message is: " + message);
+        callFromJava("Hello from JAVA!");
+    }
 }
