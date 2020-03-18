@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2016 The Qt Company Ltd.
+** Copyright (C) 2020 The Qt Company Ltd.
 ** Contact: https://www.qt.io/licensing/
 **
 ** This file is part of the QtAndroidExtras module of the Qt Toolkit.
@@ -48,37 +48,56 @@
 **
 ****************************************************************************/
 
-#include "notificationclient.h"
+import QtQuick 2.13
+import QtQuick.Window 2.13
+import QtQuick.Controls 2.13
+import QtQuick.Layouts 1.13
 
-#include <QtAndroid>
+ApplicationWindow {
+    id: window
+    visible: true
 
-NotificationClient::NotificationClient(QObject *parent)
-    : QObject(parent)
-{
-    connect(this, SIGNAL(notificationChanged()), this, SLOT(updateAndroidNotification()));
-}
+    ColumnLayout {
+        anchors.fill: parent
+        Text {
+            id: messengerLog
+            text: qsTr("")
+            clip: true
+            Layout.fillHeight: true
+            Layout.fillWidth: true
+            transformOrigin: Item.Center
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
+        }
 
-void NotificationClient::setNotification(const QString &notification)
-{
-    if (m_notification == notification)
-        return;
+        RowLayout {
+            id: rowlayout
+            Layout.bottomMargin: 10
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignBottom
+            anchors.bottom: window.bottom
+            spacing: 10
 
-    m_notification = notification;
-    emit notificationChanged();
-}
+            Button {
+                text: qsTr("Send to Java via JNI")
+                onClicked: {
+                    var message = qsTr("QML sending to Java: Hello from QML")
+                    messengerLog.text += "\n" + message
+                    JniMessenger.printFromJava(message)
+                }
+            }
 
-QString NotificationClient::notification() const
-{
-    return m_notification;
-}
+            Button {
+                text: "Clear"
+                onClicked: messengerLog.text = ""
+            }
+        }
+    }
 
-void NotificationClient::updateAndroidNotification()
-{
-    QAndroidJniObject javaNotification = QAndroidJniObject::fromString(m_notification);
-    QAndroidJniObject::callStaticMethod<void>(
-        "org/qtproject/example/notification/NotificationClient",
-        "notify",
-        "(Landroid/content/Context;Ljava/lang/String;)V",
-        QtAndroid::androidContext().object(),
-        javaNotification.object<jstring>());
+    Connections {
+        target: JniMessenger
+        function onMessageFromJava(message) {
+            var output = qsTr("QML received a message: %1").arg(message)
+            print(output)
+            messengerLog.text += "\n" + output
+        }
+    }
 }

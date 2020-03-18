@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2016 The Qt Company Ltd.
+** Copyright (C) 2020 The Qt Company Ltd.
 ** Contact: https://www.qt.io/licensing/
 **
 ** This file is part of the QtAndroidExtras module of the Qt Toolkit.
@@ -48,37 +48,39 @@
 **
 ****************************************************************************/
 
-#include "notificationclient.h"
+#include "jnimessenger.h"
 
+#include <QAndroidJniObject>
+#include <QAndroidJniEnvironment>
 #include <QtAndroid>
 
-NotificationClient::NotificationClient(QObject *parent)
-    : QObject(parent)
+JniMessenger *JniMessenger::m_instance = nullptr;
+
+static void callFromJava(JNIEnv *env, jobject /*thiz*/, jstring value)
 {
-    connect(this, SIGNAL(notificationChanged()), this, SLOT(updateAndroidNotification()));
+    emit JniMessenger::instance()->messageFromJava(env->GetStringUTFChars(value, nullptr));
 }
 
-void NotificationClient::setNotification(const QString &notification)
+JniMessenger::JniMessenger(QObject *parent) : QObject(parent)
 {
-    if (m_notification == notification)
-        return;
+    m_instance = this;
 
-    m_notification = notification;
-    emit notificationChanged();
+    JNINativeMethod methods[] {{"callFromJava", "(Ljava/lang/String;)V", reinterpret_cast<void *>(callFromJava)}};
+    QAndroidJniObject javaClass("org/qtproject/example/jnimessenger/JniMessenger");
+
+    QAndroidJniEnvironment env;
+    jclass objectClass = env->GetObjectClass(javaClass.object<jobject>());
+    env->RegisterNatives(objectClass,
+                         methods,
+                         sizeof(methods) / sizeof(methods[0]));
+    env->DeleteLocalRef(objectClass);
 }
 
-QString NotificationClient::notification() const
+void JniMessenger::printFromJava(const QString &message)
 {
-    return m_notification;
-}
-
-void NotificationClient::updateAndroidNotification()
-{
-    QAndroidJniObject javaNotification = QAndroidJniObject::fromString(m_notification);
-    QAndroidJniObject::callStaticMethod<void>(
-        "org/qtproject/example/notification/NotificationClient",
-        "notify",
-        "(Landroid/content/Context;Ljava/lang/String;)V",
-        QtAndroid::androidContext().object(),
-        javaNotification.object<jstring>());
+    QAndroidJniObject javaMessage = QAndroidJniObject::fromString(message);
+    QAndroidJniObject::callStaticMethod<void>("org/qtproject/example/jnimessenger/JniMessenger",
+                                       "printFromJava",
+                                       "(Ljava/lang/String;)V",
+                                        javaMessage.object<jstring>());
 }
