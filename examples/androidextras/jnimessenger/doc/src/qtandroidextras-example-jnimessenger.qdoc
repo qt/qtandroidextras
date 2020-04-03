@@ -98,7 +98,7 @@
     \skipto public static void printFromJava
     \printuntil );
 
-    \section2 Calling QML/C++ Functions from Java Code
+    \section1 Calling QML/C++ Functions from Java Code
 
     Directly after that, our native function \c callFromJava(String message) will be
     called, which would be then handled from C++ side. Note, that this method has
