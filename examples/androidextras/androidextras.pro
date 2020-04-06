@@ -1,12 +1,15 @@
 TEMPLATE = subdirs
+
 android {
     qtHaveModule(quick) {
         SUBDIRS += \
             notification \
-            jnimessenger
+            jnimessenger \
+            services
 
         EXAMPLE_FILES += \
             notification \
-            jnimessenger
+            jnimessenger \
+            services
     }
 }
