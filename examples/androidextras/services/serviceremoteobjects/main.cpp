@@ -1,4 +1,3 @@
-
 /****************************************************************************
 **
 ** Copyright (C) 2020 The Qt Company Ltd.
@@ -48,65 +47,45 @@
 ** $QT_END_LICENSE$
 **
 ****************************************************************************/
-import QtQuick 2.14
-import QtQuick.Window 2.14
-import QtQuick.Controls 2.14
+#include "rep_qtandroidservice_replica.h"
 
-Window {
-    id: window
-    visible: true
-    width: 640
-    height: 480
-    title: qsTr("Hello World")
+#include <QAndroidIntent>
+#include <QtAndroid>
 
-    Text {
-        id: pingLabel
-        y: 100
-        text: qsTr("Enter a name:")
-        anchors.horizontalCenter: parent.horizontalCenter
-        horizontalAlignment: Text.AlignHCenter
-        font.pixelSize: 20
-    }
+#include <QGuiApplication>
+#include <QQmlApplicationEngine>
+#include <QQmlContext>
 
-    TextInput {
-        id: pingText
-        y: 130
-        text: "Qt"
-        anchors.horizontalCenter: parent.horizontalCenter
-        horizontalAlignment: Text.AlignHCenter
-        font.pointSize: 24
-    }
+void startService()
+{
+    QAndroidIntent serviceIntent(QtAndroid::androidActivity().object(),
+                                        "org/qtproject/example/qtandroidservice/QtAndroidService");
+    QAndroidJniObject result = QtAndroid::androidActivity().callObjectMethod(
+        "startService",
+        "(Landroid/content/Intent;)Landroid/content/ComponentName;",
+        serviceIntent.handle().object());
+}
 
-    Button {
-        id: sendButton
-        y: 220
-        text: "Send name to Service"
-        anchors.horizontalCenter: parent.horizontalCenter
-        onClicked: qtAndroidService.sendToService(pingText.text)
-    }
+int main(int argc, char *argv[])
+{
+    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+    QGuiApplication app(argc, argv);
+    QQmlApplicationEngine engine;
 
-    Text {
-        id: pongLabel
-        y: 300
-        text: qsTr("Android Service replied:")
-        anchors.horizontalCenter: parent.horizontalCenter
-        horizontalAlignment: Text.AlignHCenter
-        font.pixelSize: 20
-    }
+    startService();
 
-    Text {
-        id: pongText
-        y: 330
-        text: qsTr("")
-        anchors.horizontalCenter: parent.horizontalCenter
-        horizontalAlignment: Text.AlignHCenter
-        font.pixelSize: 24
-    }
+    QRemoteObjectNode repNode;
+    repNode.connectToNode(QUrl(QStringLiteral("local:replica")));
+    QSharedPointer<QtAndroidServiceReplica> rep(repNode.acquire<QtAndroidServiceReplica>());
+    engine.rootContext()->setContextProperty("qtAndroidService", rep.data());
+    bool res = rep->waitForSource();
+    Q_ASSERT(res);
+    rep->sendToService("Qt");
 
-    Connections {
-        target: qtAndroidService
-        function onMessageFromService(message) {
-            pongText.text = message
-        }
-    }
+    QObject::connect(rep.data(), &QtAndroidServiceReplica::messageFromService, [](const QString &message){
+        qDebug() << "Service sent: " << message;
+    });
+    engine.load(QUrl(QLatin1String("qrc:/main.qml")));
+
+    return app.exec();
 }

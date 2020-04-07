@@ -1,4 +1,3 @@
-
 /****************************************************************************
 **
 ** Copyright (C) 2020 The Qt Company Ltd.
@@ -48,65 +47,26 @@
 ** $QT_END_LICENSE$
 **
 ****************************************************************************/
-import QtQuick 2.14
-import QtQuick.Window 2.14
-import QtQuick.Controls 2.14
+package org.qtproject.example.qtandroidservice;
 
-Window {
-    id: window
-    visible: true
-    width: 640
-    height: 480
-    title: qsTr("Hello World")
+import android.content.Context;
+import android.content.Intent;
+import org.qtproject.qt5.android.bindings.QtService;
+import android.util.Log;
 
-    Text {
-        id: pingLabel
-        y: 100
-        text: qsTr("Enter a name:")
-        anchors.horizontalCenter: parent.horizontalCenter
-        horizontalAlignment: Text.AlignHCenter
-        font.pixelSize: 20
+public class QtAndroidService extends QtService {
+
+    private static final String TAG = "QtAndroidService";
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        Log.i(TAG, "Creating Service");
     }
 
-    TextInput {
-        id: pingText
-        y: 130
-        text: "Qt"
-        anchors.horizontalCenter: parent.horizontalCenter
-        horizontalAlignment: Text.AlignHCenter
-        font.pointSize: 24
-    }
-
-    Button {
-        id: sendButton
-        y: 220
-        text: "Send name to Service"
-        anchors.horizontalCenter: parent.horizontalCenter
-        onClicked: qtAndroidService.sendToService(pingText.text)
-    }
-
-    Text {
-        id: pongLabel
-        y: 300
-        text: qsTr("Android Service replied:")
-        anchors.horizontalCenter: parent.horizontalCenter
-        horizontalAlignment: Text.AlignHCenter
-        font.pixelSize: 20
-    }
-
-    Text {
-        id: pongText
-        y: 330
-        text: qsTr("")
-        anchors.horizontalCenter: parent.horizontalCenter
-        horizontalAlignment: Text.AlignHCenter
-        font.pixelSize: 24
-    }
-
-    Connections {
-        target: qtAndroidService
-        function onMessageFromService(message) {
-            pongText.text = message
-        }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.i(TAG, "Destroying Service");
     }
 }

@@ -1,4 +1,3 @@
-
 /****************************************************************************
 **
 ** Copyright (C) 2020 The Qt Company Ltd.
@@ -48,65 +47,19 @@
 ** $QT_END_LICENSE$
 **
 ****************************************************************************/
-import QtQuick 2.14
-import QtQuick.Window 2.14
-import QtQuick.Controls 2.14
+#include "qtandroidservice_ro.h"
 
-Window {
-    id: window
-    visible: true
-    width: 640
-    height: 480
-    title: qsTr("Hello World")
+#include <QDebug>
+#include <QAndroidService>
 
-    Text {
-        id: pingLabel
-        y: 100
-        text: qsTr("Enter a name:")
-        anchors.horizontalCenter: parent.horizontalCenter
-        horizontalAlignment: Text.AlignHCenter
-        font.pixelSize: 20
-    }
+int main(int argc, char *argv[])
+{
+    qWarning() << "QtAndroidService starting from separate .so";
+    QAndroidService app(argc, argv);
 
-    TextInput {
-        id: pingText
-        y: 130
-        text: "Qt"
-        anchors.horizontalCenter: parent.horizontalCenter
-        horizontalAlignment: Text.AlignHCenter
-        font.pointSize: 24
-    }
+    QRemoteObjectHost srcNode(QUrl(QStringLiteral("local:replica")));
+    QtAndroidService qtAndroidService;
+    srcNode.enableRemoting(&qtAndroidService);
 
-    Button {
-        id: sendButton
-        y: 220
-        text: "Send name to Service"
-        anchors.horizontalCenter: parent.horizontalCenter
-        onClicked: qtAndroidService.sendToService(pingText.text)
-    }
-
-    Text {
-        id: pongLabel
-        y: 300
-        text: qsTr("Android Service replied:")
-        anchors.horizontalCenter: parent.horizontalCenter
-        horizontalAlignment: Text.AlignHCenter
-        font.pixelSize: 20
-    }
-
-    Text {
-        id: pongText
-        y: 330
-        text: qsTr("")
-        anchors.horizontalCenter: parent.horizontalCenter
-        horizontalAlignment: Text.AlignHCenter
-        font.pixelSize: 24
-    }
-
-    Connections {
-        target: qtAndroidService
-        function onMessageFromService(message) {
-            pongText.text = message
-        }
-    }
+    return app.exec();
 }
