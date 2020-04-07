@@ -47,65 +47,12 @@
 ** $QT_END_LICENSE$
 **
 ****************************************************************************/
-import QtQuick 2.14
-import QtQuick.Window 2.14
-import QtQuick.Controls 2.14
+#include "rep_qtandroidservice_source.h"
 
-Window {
-    id: window
-    visible: true
-    width: 640
-    height: 480
-    title: qsTr("Hello World")
-
-    Text {
-        id: pingLabel
-        y: 100
-        text: qsTr("Enter a name:")
-        anchors.horizontalCenter: parent.horizontalCenter
-        horizontalAlignment: Text.AlignHCenter
-        font.pixelSize: 20
-    }
-
-    TextInput {
-        id: pingText
-        y: 130
-        text: "Qt"
-        anchors.horizontalCenter: parent.horizontalCenter
-        horizontalAlignment: Text.AlignHCenter
-        font.pointSize: 24
-    }
-
-    Button {
-        id: sendButton
-        y: 220
-        text: "Send name to Service"
-        anchors.horizontalCenter: parent.horizontalCenter
-        onClicked: qtAndroidService.sendToService(pingText.text)
-    }
-
-    Text {
-        id: pongLabel
-        y: 300
-        text: qsTr("Android Service replied:")
-        anchors.horizontalCenter: parent.horizontalCenter
-        horizontalAlignment: Text.AlignHCenter
-        font.pixelSize: 20
-    }
-
-    Text {
-        id: pongText
-        y: 330
-        text: qsTr("")
-        anchors.horizontalCenter: parent.horizontalCenter
-        horizontalAlignment: Text.AlignHCenter
-        font.pixelSize: 24
-    }
-
-    Connections {
-        target: qtAndroidService
-        function onMessageFromService(message) {
-            pongText.text = message
-        }
-    }
-}
+class QtAndroidService : public QtAndroidServiceSource
+{
+public slots:
+    void sendToService(const QString &name) override {
+        emit messageFromService("Hello " + name);
+    };
+};

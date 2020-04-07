@@ -5,3 +5,9 @@ SUBDIRS += \
     servicebinder \
     servicebroadcast \
     servicebroadcastsamelib
+
+qtHaveModule(remoteobjects) {
+    SUBDIRS += \
+        serviceremoteobjects \
+        serviceremoteobjectssamelib
+}
