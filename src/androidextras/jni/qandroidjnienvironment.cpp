@@ -139,6 +139,7 @@ static void clearException(bool silent)
 /*!
     \class QAndroidJniExceptionCleaner
     \inmodule QtAndroidExtras
+    \brief Cleans pending JNI exceptions.
 
     The QAndroidJniExceptionCleaner is a convenience class useful to clean
     the pending JNI exceptions from the current scope.
