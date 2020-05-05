@@ -5,11 +5,13 @@ android {
         SUBDIRS += \
             notification \
             jnimessenger \
-            services
+            services \
+            customactivity
 
         EXAMPLE_FILES += \
             notification \
             jnimessenger \
-            services
+            services \
+            customactivity
     }
 }
