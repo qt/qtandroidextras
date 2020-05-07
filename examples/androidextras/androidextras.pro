@@ -6,12 +6,14 @@ android {
             notification \
             jnimessenger \
             services \
-            customactivity
+            customactivity \
+            musiclist
 
         EXAMPLE_FILES += \
             notification \
             jnimessenger \
             services \
-            customactivity
+            customactivity \
+            musiclist
     }
 }
