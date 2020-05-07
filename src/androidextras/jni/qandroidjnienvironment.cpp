@@ -93,6 +93,21 @@ QT_BEGIN_NAMESPACE
 
     Returns the class pointer or null if is not found.
 
+    A use case for this function is searching for a custom class then calling
+    its memeber method. The following code snippet create an instance of the
+    class \c CustomClass and then calls \c printFromJava() method:
+
+    \code
+    QAndroidJniEnvironment env;
+    jclass javaClass = env.findClass("org/qtproject/example/qtandroidextras/CustomClass");
+    QAndroidJniObject classObject(javaClass);
+
+    QAndroidJniObject javaMessage = QAndroidJniObject::fromString("findClass example");
+    classObject.callMethod<void>("printFromJava",
+                                 "(Ljava/lang/String;)V",
+                                 javaMessage.object<jstring>());
+    \badcode
+
     \since Qt 5.12
  */
 
