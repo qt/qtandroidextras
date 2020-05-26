@@ -102,8 +102,8 @@ namespace QtAndroid
     Q_ANDROIDEXTRAS_EXPORT void hideSplashScreen(int duration);
 
     enum class PermissionResult {
-        Granted,
-        Denied
+        Denied = -1,
+        Granted = 0
     };
     typedef QHash<QString, PermissionResult> PermissionResultMap;
     typedef std::function<void(const PermissionResultMap &)> PermissionResultCallback;
