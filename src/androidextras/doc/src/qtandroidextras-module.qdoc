@@ -31,6 +31,7 @@
     \brief The Qt Android Extras module contains additional functionality for development on Android.
 
     \ingroup modules
+    \qtcmakepackage AndroidExtras
     \qtvariable androidextras
 
     To include the definitions of the module's classes, use the
