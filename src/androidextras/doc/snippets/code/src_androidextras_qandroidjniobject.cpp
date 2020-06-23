@@ -95,15 +95,15 @@ void functionException()
 //! [Registering native methods]
 static void fromJavaOne(JNIEnv *env, jobject thiz, jint x)
 {
-    Q_UNUSED(env)
-    Q_UNUSED(thiz)
+    Q_UNUSED(env);
+    Q_UNUSED(thiz);
     qDebug() << x << "< 100";
 }
 
 static void fromJavaTwo(JNIEnv *env, jobject thiz, jint x)
 {
-    Q_UNUSED(env)
-    Q_UNUSED(thiz)
+    Q_UNUSED(env);
+    Q_UNUSED(thiz);
     qDebug() << x << ">= 100";
 }
 
