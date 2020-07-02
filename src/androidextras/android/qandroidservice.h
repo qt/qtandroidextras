@@ -51,6 +51,8 @@ class QAndroidIntent;
 class QAndroidBinder;
 class Q_ANDROIDEXTRAS_EXPORT QAndroidService : public QCoreApplication
 {
+    Q_OBJECT
+
 public:
     QAndroidService(int &argc, char **argv
 #ifndef Q_QDOC
