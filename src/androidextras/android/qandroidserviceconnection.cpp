@@ -62,7 +62,7 @@ QT_BEGIN_NAMESPACE
     Creates a new object
  */
 QAndroidServiceConnection::QAndroidServiceConnection()
-    : m_handle("org/qtproject/qt5/android/extras/QtAndroidServiceConnection", "(J)V", jlong(this))
+    : m_handle("org/qtproject/qt/android/extras/QtAndroidServiceConnection", "(J)V", jlong(this))
 {
 }
 

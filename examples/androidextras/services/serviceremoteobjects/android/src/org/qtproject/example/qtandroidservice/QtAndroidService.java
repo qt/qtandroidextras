@@ -51,7 +51,7 @@ package org.qtproject.example.qtandroidservice;
 
 import android.content.Context;
 import android.content.Intent;
-import org.qtproject.qt5.android.bindings.QtService;
+import org.qtproject.qt.android.bindings.QtService;
 import android.util.Log;
 
 public class QtAndroidService extends QtService {

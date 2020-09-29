@@ -19,4 +19,4 @@ if(ANDROID)
 endif()
 
 #### Keys ignored in scope 1:.:.:qandroidjniobject.pro:<TRUE>:
-# OTHER_FILES = "testdata/src/org/qtproject/qt5/android/testdata/QtAndroidJniObjectTestClass.java"
+# OTHER_FILES = "testdata/src/org/qtproject/qt/android/testdata/QtAndroidJniObjectTestClass.java"

@@ -26,7 +26,7 @@
 **
 ****************************************************************************/
 
-package org.qtproject.qt5.android.testdatapackage;
+package org.qtproject.qt.android.testdatapackage;
 
 public class QtAndroidJniObjectTestClass
 {

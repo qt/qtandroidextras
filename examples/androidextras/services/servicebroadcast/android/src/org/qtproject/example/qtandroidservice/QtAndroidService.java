@@ -54,7 +54,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 import android.os.IBinder;
-import org.qtproject.qt5.android.bindings.QtService;
+import org.qtproject.qt.android.bindings.QtService;
 import android.content.IntentFilter;
 
 public class QtAndroidService extends QtService

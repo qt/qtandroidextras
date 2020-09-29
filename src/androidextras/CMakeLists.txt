@@ -29,7 +29,7 @@ qt_add_module(AndroidExtras
 
 if(ANDROID)
     set_property(TARGET AndroidExtras APPEND PROPERTY QT_ANDROID_BUNDLED_JAR_DEPENDENCIES
-        jar/QtAndroidExtras.jar
+        jar/Qt${QtAndroidExtras_VERSION_MAJOR}AndroidExtras.jar
     )
 endif()
 qt_add_docs(AndroidExtras

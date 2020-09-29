@@ -77,7 +77,7 @@ QT_BEGIN_NAMESPACE
     The example below demonstrates how to call two different static functions.
     \code
     // Java class
-    package org.qtproject.qt5;
+    package org.qtproject.qt;
     class TestClass
     {
        static String fromNumber(int x) { ... }
@@ -89,7 +89,7 @@ QT_BEGIN_NAMESPACE
 
     \code
     // C++ code
-    QAndroidJniObject stringNumber = QAndroidJniObject::callStaticObjectMethod("org/qtproject/qt5/TestClass",
+    QAndroidJniObject stringNumber = QAndroidJniObject::callStaticObjectMethod("org/qtproject/qt/TestClass",
                                                                                "fromNumber"
                                                                                "(I)Ljava/lang/String;",
                                                                                10);
@@ -101,7 +101,7 @@ QT_BEGIN_NAMESPACE
     // C++ code
     QAndroidJniObject string1 = QAndroidJniObject::fromString("String1");
     QAndroidJniObject string2 = QAndroidJniObject::fromString("String2");
-    QAndroidJniObject stringArray = QAndroidJniObject::callStaticObjectMethod("org/qtproject/qt5/TestClass",
+    QAndroidJniObject stringArray = QAndroidJniObject::callStaticObjectMethod("org/qtproject/qt/TestClass",
                                                                               "stringArray"
                                                                               "(Ljava/lang/String;Ljava/lang/String;)[Ljava/lang/String;"
                                                                                string1.object<jstring>(),

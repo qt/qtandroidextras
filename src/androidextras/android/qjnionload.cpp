@@ -96,9 +96,9 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void* /*reserved*/)
 
     JNIEnv *env = uenv.nativeEnvironment;
     jclass clazz;
-    clazz = env->FindClass("org/qtproject/qt5/android/extras/QtNative");
+    clazz = env->FindClass("org/qtproject/qt/android/extras/QtNative");
     if (!clazz) {
-        __android_log_print(ANDROID_LOG_FATAL,"Qt", "Can't find \"org/qtproject/qt5/android/extras/QtNative\" class");
+        __android_log_print(ANDROID_LOG_FATAL,"Qt", "Can't find \"org/qtproject/qt/android/extras/QtNative\" class");
         return -1;
     }
 

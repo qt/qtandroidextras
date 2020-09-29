@@ -47,7 +47,7 @@
 
 QT_BEGIN_NAMESPACE
 QAndroidBinderPrivate::QAndroidBinderPrivate(QAndroidBinder *binder)
-    : handle("org/qtproject/qt5/android/extras/QtAndroidBinder", "(J)V", jlong(binder))
+    : handle("org/qtproject/qt/android/extras/QtAndroidBinder", "(J)V", jlong(binder))
     , m_isQtAndroidBinder(true)
 {
     QAndroidJniExceptionCleaner cleaner;

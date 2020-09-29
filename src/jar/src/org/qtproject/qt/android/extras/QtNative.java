@@ -37,7 +37,7 @@
 **
 ****************************************************************************/
 
-package org.qtproject.qt5.android.extras;
+package org.qtproject.qt.android.extras;
 
 import android.content.ComponentName;
 import android.content.ServiceConnection;

@@ -37,14 +37,15 @@
 **
 ****************************************************************************/
 
-package org.qtproject.qt5.android.extras;
+package org.qtproject.qt.android.extras;
 
-import android.os.Binder;
-import android.os.Parcel;
+import android.content.ComponentName;
+import android.content.ServiceConnection;
+import android.os.IBinder;
 
-public class QtAndroidBinder extends Binder
+public class QtAndroidServiceConnection implements ServiceConnection
 {
-    public QtAndroidBinder(long id)
+    public QtAndroidServiceConnection(long id)
     {
         m_id = id;
     }
@@ -56,12 +57,20 @@ public class QtAndroidBinder extends Binder
             m_id = id;
         }
     }
+
     @Override
-    protected boolean onTransact(int code, Parcel data, Parcel reply, int flags)
+    public void onServiceConnected(ComponentName name, IBinder service)
     {
-        synchronized(this)
-        {
-            return QtNative.onTransact(m_id, code, data, reply, flags);
+        synchronized(this) {
+            QtNative.onServiceConnected(m_id, name.flattenToString(), service);
+        }
+    }
+
+    @Override
+    public void onServiceDisconnected(ComponentName name)
+    {
+        synchronized(this) {
+            QtNative.onServiceDisconnected(m_id, name.flattenToString());
         }
     }
 

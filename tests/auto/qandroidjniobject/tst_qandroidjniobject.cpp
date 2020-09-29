@@ -31,7 +31,7 @@
 #include <QtAndroidExtras/QAndroidJniObject>
 #include <QtAndroidExtras/QAndroidJniEnvironment>
 
-static const char testClassName[] = "org/qtproject/qt5/android/testdatapackage/QtAndroidJniObjectTestClass";
+static const char testClassName[] = "org/qtproject/qt/android/testdatapackage/QtAndroidJniObjectTestClass";
 
 static const jbyte A_BYTE_VALUE = 127;
 static const jshort A_SHORT_VALUE = 32767;
@@ -706,7 +706,7 @@ void tst_QAndroidJniObject::getStaticCharField()
 
 void tst_QAndroidJniObject::getBooleanField()
 {
-    QAndroidJniObject obj("org/qtproject/qt5/android/QtActivityDelegate");
+    QAndroidJniObject obj("org/qtproject/qt/android/QtActivityDelegate");
 
     QVERIFY(obj.isValid());
     QVERIFY(!obj.getField<jboolean>("m_fullScreen"));
@@ -714,7 +714,7 @@ void tst_QAndroidJniObject::getBooleanField()
 
 void tst_QAndroidJniObject::getIntField()
 {
-    QAndroidJniObject obj("org/qtproject/qt5/android/QtActivityDelegate");
+    QAndroidJniObject obj("org/qtproject/qt/android/QtActivityDelegate");
 
     QVERIFY(obj.isValid());
     jint res = obj.getField<jint>("m_currentRotation");
@@ -1039,7 +1039,7 @@ void tst_QAndroidJniObject::isClassAvailable()
 {
     QVERIFY(QAndroidJniObject::isClassAvailable("java/lang/String"));
     QVERIFY(!QAndroidJniObject::isClassAvailable("class/not/Available"));
-    QVERIFY(QAndroidJniObject::isClassAvailable("org/qtproject/qt5/android/QtActivityDelegate"));
+    QVERIFY(QAndroidJniObject::isClassAvailable("org/qtproject/qt/android/QtActivityDelegate"));
 }
 
 void tst_QAndroidJniObject::fromLocalRef()
