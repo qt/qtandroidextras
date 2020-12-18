@@ -4,7 +4,7 @@
 ## tst_qandroidfunctions Test:
 #####################################################################
 
-qt_add_test(tst_qandroidfunctions
+qt_internal_add_test(tst_qandroidfunctions
     SOURCES
         tst_qandroidfunctions.cpp
     PUBLIC_LIBRARIES

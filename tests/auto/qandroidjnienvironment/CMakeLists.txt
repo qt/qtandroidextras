@@ -4,7 +4,7 @@
 ## tst_qandroidjnienvironment Test:
 #####################################################################
 
-qt_add_test(tst_qandroidjnienvironment
+qt_internal_add_test(tst_qandroidjnienvironment
     SOURCES
         tst_qandroidjnienvironment.cpp
     PUBLIC_LIBRARIES

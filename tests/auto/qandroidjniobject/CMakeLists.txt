@@ -4,7 +4,7 @@
 ## tst_qandroidjniobject Test:
 #####################################################################
 
-qt_add_test(tst_qandroidjniobject
+qt_internal_add_test(tst_qandroidjniobject
     SOURCES
         tst_qandroidjniobject.cpp
     PUBLIC_LIBRARIES

@@ -4,7 +4,7 @@
 ## AndroidExtras Module:
 #####################################################################
 
-qt_add_module(AndroidExtras
+qt_internal_add_module(AndroidExtras
     SOURCES
         android/qandroidactivitycallbackresultreceiver.cpp
         android/qandroidactivityresultreceiver.cpp android/qandroidactivityresultreceiver.h android/qandroidactivityresultreceiver_p.h
@@ -29,10 +29,10 @@ qt_add_module(AndroidExtras
 
 if(ANDROID)
     set_property(TARGET AndroidExtras APPEND PROPERTY QT_ANDROID_BUNDLED_JAR_DEPENDENCIES
-        jar/Qt${QtAndroidExtras_VERSION_MAJOR}AndroidExtras.jar
+        jar/Qt${QtAndroidExtras_VERSION_MAJOR}AndroidExtras.jar # special case
     )
 endif()
-qt_add_docs(AndroidExtras
+qt_internal_add_docs(AndroidExtras
     doc/qtandroidextras.qdocconf
 )
 

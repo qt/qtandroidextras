@@ -10,9 +10,10 @@ project(QtAndroidExtras
     LANGUAGES CXX C
 )
 
-find_package(Qt6 ${PROJECT_VERSION} CONFIG REQUIRED COMPONENTS BuildInternals Core Gui) # special case
-
 # special case begin
+find_package(Qt6 ${PROJECT_VERSION} CONFIG REQUIRED COMPONENTS BuildInternals Core)
+find_package(Qt6 ${PROJECT_VERSION} CONFIG OPTIONAL_COMPONENTS Gui)
+
 if (NOT ANDROID)
     message(NOTICE "Skipping the build as the condition \"ANDROID\" is not met.")
     return()
