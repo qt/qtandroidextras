@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2021 Klaralvdalens Datakonsult AB (KDAB).
+** Copyright (C) 2019 Klaralvdalens Datakonsult AB (KDAB).
 ** Contact: https://www.qt.io/licensing/
 **
 ** This file is part of the Qt Toolkit.

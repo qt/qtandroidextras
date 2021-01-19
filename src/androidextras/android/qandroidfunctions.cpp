@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2021 BogDan Vatra <bogdan@kde.org>
+** Copyright (C) 2017 BogDan Vatra <bogdan@kde.org>
 ** Copyright (C) 2021 The Qt Company Ltd.
 ** Contact: https://www.qt.io/licensing/
 **
