@@ -41,7 +41,7 @@
 #define QTANDROIDSERVICECONNECTION_H
 
 #include <QtAndroidExtras/qandroidextrasglobal.h>
-#include <QAndroidJniObject>
+#include <QtAndroidExtras/QAndroidJniObject>
 
 QT_BEGIN_NAMESPACE
 class QAndroidBinder;
