@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2017 BogDan Vatra <bogdan@kde.org>
+** Copyright (C) 2021 BogDan Vatra <bogdan@kde.org>
 ** Contact: https://www.qt.io/licensing/
 **
 ** This file is part of the Qt Toolkit.
