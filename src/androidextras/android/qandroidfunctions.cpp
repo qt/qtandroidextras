@@ -101,7 +101,11 @@ QT_BEGIN_NAMESPACE
     \since 5.3
     \fn QAndroidJniObject QtAndroid::androidActivity()
 
-    Returns a handle to this application's main Activity
+    Returns a handle to this application's latest started Activity
+
+    \note When having multiple services or activities, this
+    is not ideal. This limitation is discussed here:
+    \l{https://bugreports.qt.io/browse/QTBUG-86048}{QTBUG-86048}.
 
     \sa QAndroidJniObject, androidService(), androidContext()
 */
@@ -114,7 +118,12 @@ QAndroidJniObject QtAndroid::androidActivity()
     \since 5.7
     \fn QAndroidJniObject QtAndroid::androidService()
 
-    Returns a handle to this application's main Service
+    Returns a handle to this application's latest started
+    service.
+
+    \note When having multiple services or activities, this
+    is not ideal. This limitation is discussed here:
+    \l{https://bugreports.qt.io/browse/QTBUG-86048}{QTBUG-86048}.
 
     \sa QAndroidJniObject, androidActivity(), androidContext()
 */
@@ -127,9 +136,23 @@ QAndroidJniObject QtAndroid::androidService()
     \since 5.8
     \fn QAndroidJniObject QtAndroid::androidContext()
 
-    Returns a handle to this application's main Context. Depending on the nature of
-    the application the Context object is either the main Service or Activity
-    object.
+    Returns a handle to this application's current Context.
+
+    The nature of the returned Context object depends on the state of the
+    application:
+
+    If the activity object is valid, meaning the application is currently
+    running within an activity context, androidContext() will return a handle to
+    that activity.
+
+    If the activity object is not valid, which can occur if the application
+    is running as a service, then androidContext() will return a handle to the
+    service.
+
+    This distinction is important because activities and services have different
+    life-cycle methods for different purposes within an Android
+    application. Activities are typically used for UI interactions with the user,
+    while services run in the background to perform long-running operations.
 
     \sa QAndroidJniObject, androidActivity(), androidService()
 */
